@@ -32,7 +32,7 @@ export default function TOC() {
           href="https://github.com/benjaminsmeyer/kambaz-next-js"
           id="wd-github"
         >
-          GitHub Repository
+          GitHub
         </Link>
       </li>
     </ul>
