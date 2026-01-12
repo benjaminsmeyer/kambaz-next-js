@@ -4,6 +4,7 @@ export default function labs() {
     <div id="wd-labs">
       <h1>Labs</h1>
       <div id="wd-student-name">Benjamin Meyer</div>
+      <div id="wd-section-name">Online Spring 2026</div>
       <a id="wd-github" href="https://github.com/benjaminsmeyer/kambaz-next-js">
         GitHub Repository
       </a>
