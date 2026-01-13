@@ -6,7 +6,7 @@ export default function Signin() {
       <input placeholder="username" className="wd-username" /> <br />
       <input placeholder="password" type="password" className="wd-password" />
       <br />
-      <Link href="Profile" id="wd-signin-btn">
+      <Link href="dashboard" id="wd-signin-btn">
         Sign in
       </Link>
       <br />
