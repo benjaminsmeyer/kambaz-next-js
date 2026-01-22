@@ -34,7 +34,7 @@ export default function Profile() {
         <option value="STUDENT">Student</option>
       </select>
       <br />
-      <Link href="Signin"> Sign out </Link>
+      <Link href="signin"> Sign out </Link>
     </div>
   );
 }

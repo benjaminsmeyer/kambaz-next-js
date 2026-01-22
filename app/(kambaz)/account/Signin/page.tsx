@@ -10,7 +10,7 @@ export default function Signin() {
         Sign in
       </Link>
       <br />
-      <Link href="Signup" id="wd-signup-link">
+      <Link href="signup" id="wd-signup-link">
         Sign up
       </Link>
     </div>

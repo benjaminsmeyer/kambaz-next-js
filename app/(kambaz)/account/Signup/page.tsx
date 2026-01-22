@@ -13,9 +13,9 @@ export default function Signup() {
         className="wd-password-verify"
       />
       <br />
-      <Link href="Profile"> Sign up </Link>
+      <Link href="profile"> Sign up </Link>
       <br />
-      <Link href="Signin"> Sign in </Link>
+      <Link href="signin"> Sign in </Link>
     </div>
   );
 }
