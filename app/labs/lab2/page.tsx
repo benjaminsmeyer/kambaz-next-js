@@ -20,11 +20,17 @@ import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
 import BootstrapForms from "./BootstrapForms";
 import BootstrapNavigation from "./BootstrapNavigation";
+import Link from "next/link";
 
 export default function Lab2() {
   return (
     <Container id="wd-lab2">
       <h2>Lab 2 - Cascading Style Sheets</h2>
+      <div className="mb-3">
+        <Link href="/labs/lab2/tailwind" className="btn btn-primary">
+          Go to Tailwind Page
+        </Link>
+      </div>
       <h3>Styling with the STYLE attribute</h3>
       <p>
         Style attribute allows configuring look and feel right on the element.
