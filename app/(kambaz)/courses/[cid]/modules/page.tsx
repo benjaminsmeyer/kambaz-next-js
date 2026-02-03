@@ -11,7 +11,7 @@ export default function Modules() {
       <br />
       <br />
       <br />
-      <ListGroup className="rounded-0" id="wd-modules">
+      <ListGroup className="rounded-0 mt-4" id="wd-modules">
         <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
           <div className="wd-title p-3 ps-2 bg-secondary">
             <BsGripVertical className="me-2 fs-3" /> Week 1
