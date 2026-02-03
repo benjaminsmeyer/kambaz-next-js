@@ -44,7 +44,7 @@ export default function Assignments() {
       <ListGroup className="rounded-0 border">
         <ListGroupItem className="p-0">
           <div className="p-3 bg-secondary d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-2">
+            <div className="d-flex align-items-center gap-2" id="wd-assignments-title">
               <BsGripVertical className="fs-3" />
               <FaCaretDown />
               ASSIGNMENTS
