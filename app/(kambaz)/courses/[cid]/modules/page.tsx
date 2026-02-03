@@ -1,6 +1,6 @@
 import { BsGripVertical } from "react-icons/bs";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import ModulesControls from "./modulesControls";
+import ModulesControls from "./ModulesControls";
 import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 
