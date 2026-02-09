@@ -1,8 +1,6 @@
 "use client";
 
 import { Form, Row, Col, Button, InputGroup } from "react-bootstrap";
-import { BsCalendar, BsClock } from "react-icons/bs";
-import { IoMdClose } from "react-icons/io";
 
 export default function AssignmentEditor() {
   return (
