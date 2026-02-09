@@ -6,6 +6,31 @@ import { ListGroup } from "react-bootstrap";
 export default function CourseNavigation() {
   const pathname = usePathname();
   const { cid } = useParams();
+
+  const links = [
+    "Home",
+    "Modules",
+    "Piazza",
+    "Zoom",
+    "Assignments",
+    "Quizzes",
+    "Grades",
+    "People",
+  ];
+
+  const getLinkPath = (linkName: string) => {
+    // People link goes to /courses/[cid]/people/table
+    if (linkName === "People") {
+      return `/courses/${cid}/people/table`;
+    }
+    // All other links go to /courses/[cid]/[linkname in lowercase]
+    return `/courses/${cid}/${linkName.toLowerCase()}`;
+  };
+
+  const getLinkId = (linkName: string) => {
+    return `wd-course-${linkName.toLowerCase()}-link`;
+  };
+
   const isActive = (href: string) => pathname.startsWith(href);
 
   return (
@@ -14,69 +39,21 @@ export default function CourseNavigation() {
       className="wd rounded-0 fs-5"
       variant="flush"
     >
-      <Link
-        href={`/courses/${cid}/home`}
-        id="wd-course-home-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/home`) ? "active" : "text-danger"
-        }`}
-      >
-        Home
-      </Link>
-      <Link
-        href={`/courses/${cid}/modules`}
-        id="wd-course-modules-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/modules`) ? "active" : "text-danger"
-        }`}
-      >
-        Modules
-      </Link>
-      <Link
-        href={`/courses/${cid}/piazza`}
-        id="wd-course-piazza-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/piazza`) ? "active" : "text-danger"
-        }`}
-      >
-        Piazza
-      </Link>
-      <Link
-        href={`/courses/${cid}/zoom`}
-        id="wd-course-zoom-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/zoom`) ? "active" : "text-danger"
-        }`}
-      >
-        Zoom
-      </Link>
-      <Link
-        href={`/courses/${cid}/assignments`}
-        id="wd-course-assignments-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/assignments`) ? "active" : "text-danger"
-        }`}
-      >
-        Assignments
-      </Link>
-      <Link
-        href={`/courses/${cid}/quizzes`}
-        id="wd-course-quizzes-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/quizzes`) ? "active" : "text-danger"
-        }`}
-      >
-        Quizzes
-      </Link>
-      <Link
-        href={`/courses/${cid}/people/table`}
-        id="wd-course-people-link"
-        className={`list-group-item list-group-item-action border-0 ${
-          isActive(`/courses/${cid}/people/table`) ? "active" : "text-danger"
-        }`}
-      >
-        People
-      </Link>
+      {links.map((link) => {
+        const href = getLinkPath(link);
+        return (
+          <Link
+            key={link}
+            href={href}
+            id={getLinkId(link)}
+            className={`list-group-item list-group-item-action border-0 ${
+              isActive(href) ? "active" : "text-danger"
+            }`}
+          >
+            {link}
+          </Link>
+        );
+      })}
     </ListGroup>
   );
 }

@@ -1,0 +1,242 @@
+[
+  {
+    "_id": "A101",
+    "title": "Propulsion Assignment",
+    "course": "RS101",
+    "available": "May 1 at 12:00am",
+    "due": "May 8 at 11:59pm",
+    "until": "May 15 at 11:59pm",
+    "points": 100,
+    "description": "Research and document the fundamental principles of rocket propulsion. Include a detailed analysis of Newton's Third Law as it applies to rocket motion, the role of thrust and specific impulse, and compare at least three different propulsion systems used in modern aerospace applications."
+  },
+  {
+    "_id": "A102",
+    "title": "Combustion Analysis",
+    "course": "RS101",
+    "available": "May 8 at 12:00am",
+    "due": "May 15 at 11:59pm",
+    "until": "May 22 at 11:59pm",
+    "points": 100,
+    "description": "Analyze combustion processes in rocket engines. Evaluate the efficiency of different fuel-oxidizer combinations, calculate combustion temperature and pressure, and propose optimization strategies for maximizing thrust while minimizing waste."
+  },
+  {
+    "_id": "A103",
+    "title": "Nozzle Design Project",
+    "course": "RS101",
+    "available": "May 15 at 12:00am",
+    "due": "May 22 at 11:59pm",
+    "until": "May 29 at 11:59pm",
+    "points": 150,
+    "description": "Design a rocket nozzle using CAD software. Your submission should include technical drawings, calculations for flow dynamics, performance predictions, and a written explanation of your design choices. Consider expansion ratios, throat diameter, and exit velocity."
+  },
+  {
+    "_id": "A201",
+    "title": "Aerodynamics Quiz",
+    "course": "RS102",
+    "available": "May 2 at 12:00am",
+    "due": "May 9 at 11:59pm",
+    "until": "May 16 at 11:59pm",
+    "points": 75,
+    "description": "Complete a comprehensive quiz covering fundamental aerodynamic concepts. Topics include lift and drag forces, pressure distribution, airfoil characteristics, and Bernoulli's principle. Use provided reference materials and show all calculations."
+  },
+  {
+    "_id": "A202",
+    "title": "Flow Analysis",
+    "course": "RS102",
+    "available": "May 9 at 12:00am",
+    "due": "May 16 at 11:59pm",
+    "until": "May 23 at 11:59pm",
+    "points": 100,
+    "description": "Conduct a computational fluid dynamics (CFD) analysis of airflow around an airfoil. Compare subsonic and supersonic flow regimes, analyze pressure coefficients, and document how shock waves form. Provide visualizations and detailed technical explanations."
+  },
+  {
+    "_id": "A203",
+    "title": "Heating Analysis",
+    "course": "RS102",
+    "available": "May 16 at 12:00am",
+    "due": "May 23 at 11:59pm",
+    "until": "May 30 at 11:59pm",
+    "points": 100,
+    "description": "Study aerodynamic heating effects during atmospheric re-entry. Calculate heat transfer rates at various altitudes and velocities, evaluate thermal protection system materials, and propose a thermal management strategy for a spacecraft. Include experimental data and theoretical analysis."
+  },
+  {
+    "_id": "A301",
+    "title": "Structural Design Task",
+    "course": "RS103",
+    "available": "May 3 at 12:00am",
+    "due": "May 10 at 11:59pm",
+    "until": "May 17 at 11:59pm",
+    "points": 120,
+    "description": "Design a spacecraft structural framework. Select appropriate materials (aluminum alloys, composites, titanium), calculate load-bearing capacity, perform finite element analysis, and justify your design decisions based on weight, strength, and cost considerations."
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Calculations",
+    "course": "RS103",
+    "available": "May 10 at 12:00am",
+    "due": "May 17 at 11:59pm",
+    "until": "May 24 at 11:59pm",
+    "points": 100,
+    "description": "Solve orbital mechanics problems using Kepler's Laws and classical orbital elements. Calculate transfer orbits, determine delta-v requirements for mission maneuvers, and plan a lunar or planetary mission trajectory with detailed mission analysis."
+  },
+  {
+    "_id": "A303",
+    "title": "Systems Engineering Exam",
+    "course": "RS103",
+    "available": "May 17 at 12:00am",
+    "due": "May 24 at 11:59pm",
+    "until": "May 31 at 11:59pm",
+    "points": 200,
+    "description": "Comprehensive exam covering spacecraft systems integration. Design a complete spacecraft including propulsion, power, communication, thermal control, and attitude determination systems. Integrate all subsystems and verify performance against mission requirements."
+  },
+  {
+    "_id": "A401",
+    "title": "Organic Synthesis Lab",
+    "course": "RS104",
+    "available": "May 4 at 12:00am",
+    "due": "May 11 at 11:59pm",
+    "until": "May 18 at 11:59pm",
+    "points": 125,
+    "description": "Conduct a multi-step organic synthesis experiment. Prepare your target compound following provided procedures, purify the product using column chromatography, and characterize it using IR and NMR spectroscopy. Submit a detailed lab report with yield calculations and spectroscopic analysis."
+  },
+  {
+    "_id": "A402",
+    "title": "Spectroscopy Problem Set",
+    "course": "RS104",
+    "available": "May 11 at 12:00am",
+    "due": "May 18 at 11:59pm",
+    "until": "May 25 at 11:59pm",
+    "points": 100,
+    "description": "Solve spectroscopy problems involving IR, NMR, and mass spectrometry. Identify unknown organic compounds from spectroscopic data, interpret splitting patterns in 1H NMR, assign functional groups using IR frequencies, and explain fragmentation patterns in mass spectra."
+  },
+  {
+    "_id": "A403",
+    "title": "Retrosynthesis Design",
+    "course": "RS104",
+    "available": "May 18 at 12:00am",
+    "due": "May 25 at 11:59pm",
+    "until": "June 1 at 11:59pm",
+    "points": 150,
+    "description": "Design a retrosynthetic route to a complex organic molecule. Work backwards from the target compound, identify key disconnections, select appropriate reactions, and provide forward synthesis with reagent details. Discuss protecting group strategies and potential side reactions."
+  },
+  {
+    "_id": "A501",
+    "title": "Coordination Complex Synthesis",
+    "course": "RS105",
+    "available": "May 5 at 12:00am",
+    "due": "May 12 at 11:59pm",
+    "until": "May 19 at 11:59pm",
+    "points": 110,
+    "description": "Synthesize and characterize a metal coordination complex. Prepare the complex using specified ligands and metal salts, determine its structure using spectroscopic methods, analyze magnetic properties, and characterize by-products. Submit synthesis report with yields and characterization data."
+  },
+  {
+    "_id": "A502",
+    "title": "Crystal Structure Analysis",
+    "course": "RS105",
+    "available": "May 12 at 12:00am",
+    "due": "May 19 at 11:59pm",
+    "until": "May 26 at 11:59pm",
+    "points": 100,
+    "description": "Analyze crystal structures using X-ray diffraction data. Determine unit cell parameters, identify space groups, interpret powder diffraction patterns, and relate crystal structure to physical properties. Use crystallographic software for structure refinement and visualization."
+  },
+  {
+    "_id": "A503",
+    "title": "Catalysis Mechanism Project",
+    "course": "RS105",
+    "available": "May 19 at 12:00am",
+    "due": "May 26 at 11:59pm",
+    "until": "June 2 at 11:59pm",
+    "points": 140,
+    "description": "Investigate catalytic mechanisms in heterogeneous catalysis. Study a commercial catalytic process, propose reaction mechanisms, analyze kinetic data, and discuss how surface properties enhance catalytic activity. Include computational modeling of active sites if applicable."
+  },
+  {
+    "_id": "A601",
+    "title": "Thermodynamics Problem Set",
+    "course": "RS106",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "until": "May 20 at 11:59pm",
+    "points": 100,
+    "description": "Solve thermodynamic problems involving the first and second laws. Calculate entropy changes, determine spontaneity of reactions using Gibbs free energy, and analyze phase equilibria. Show all work and provide clear explanations for each problem solution."
+  },
+  {
+    "_id": "A602",
+    "title": "Kinetics Lab Report",
+    "course": "RS106",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "until": "May 27 at 11:59pm",
+    "points": 130,
+    "description": "Conduct kinetics experiments to determine reaction rates and rate laws. Measure concentration changes over time, plot data to identify reaction order, calculate rate constants, and determine activation energy using the Arrhenius equation. Include comprehensive data analysis and discussion."
+  },
+  {
+    "_id": "A603",
+    "title": "Quantum Chemistry Assignment",
+    "course": "RS106",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "until": "June 3 at 11:59pm",
+    "points": 120,
+    "description": "Solve quantum mechanics problems and perform molecular orbital calculations. Use computational chemistry software to calculate orbital energies, visualize wavefunctions, predict molecular geometries, and explain bonding using molecular orbital theory."
+  },
+  {
+    "_id": "A701",
+    "title": "Sindarin Translation Exercise",
+    "course": "RS107",
+    "available": "May 1 at 12:00am",
+    "due": "May 7 at 11:59pm",
+    "until": "May 14 at 11:59pm",
+    "points": 80,
+    "description": "Translate English phrases and short passages into Sindarin. Apply proper grammar rules, correct pronunciation guides, and demonstrate understanding of Sindarin phonological features. Compare your translations with authoritative Elvish language resources."
+  },
+  {
+    "_id": "A702",
+    "title": "Quenya Grammar Quiz",
+    "course": "RS107",
+    "available": "May 8 at 12:00am",
+    "due": "May 14 at 11:59pm",
+    "until": "May 21 at 11:59pm",
+    "points": 90,
+    "description": "Complete a quiz on Quenya grammatical structures. Demonstrate mastery of noun declensions, verb conjugations, and syntactic constructions. Analyze sample Quenya text and explain grammatical features. Provide translations of given phrases."
+  },
+  {
+    "_id": "A703",
+    "title": "Tengwar Script Transcription",
+    "course": "RS107",
+    "available": "May 15 at 12:00am",
+    "due": "May 21 at 11:59pm",
+    "until": "May 28 at 11:59pm",
+    "points": 100,
+    "description": "Transcribe provided English text and Elvish passages into Tengwar script. Master the letter forms, diacritical marks, and spacing conventions. Submit clear, legible transcriptions with an explanation of any challenging letter combinations encountered."
+  },
+  {
+    "_id": "A801",
+    "title": "Diplomatic Relations Essay",
+    "course": "RS108",
+    "available": "May 2 at 12:00am",
+    "due": "May 9 at 11:59pm",
+    "until": "May 16 at 11:59pm",
+    "points": 150,
+    "description": "Write a comprehensive essay analyzing diplomatic relationships between Middle-earth races. Examine alliances, treaties, conflicts, and cultural exchanges between Elves, Men, Dwarves, and Hobbits. Support your analysis with textual evidence and historical context."
+  },
+  {
+    "_id": "A802",
+    "title": "Conflict Analysis Case Study",
+    "course": "RS108",
+    "available": "May 9 at 12:00am",
+    "due": "May 16 at 11:59pm",
+    "until": "May 23 at 11:59pm",
+    "points": 140,
+    "description": "Conduct a detailed case study of a major conflict in Middle-earth (e.g., War of the Ring, ancient wars). Analyze causes, key players, diplomatic efforts, and outcomes. Evaluate how diplomacy could have altered the conflict's trajectory and discuss lessons for real-world relations."
+  },
+  {
+    "_id": "A803",
+    "title": "Leadership Comparison Project",
+    "course": "RS108",
+    "available": "May 16 at 12:00am",
+    "due": "May 23 at 11:59pm",
+    "until": "May 30 at 11:59pm",
+    "points": 160,
+    "description": "Compare leadership styles and diplomatic approaches of major Middle-earth leaders (Elrond, Galadriel, Aragorn, Thorin, etc.). Analyze their effectiveness, decision-making processes, and impact on inter-racial diplomacy. Create a comparative matrix and provide detailed analysis."
+  }
+]
