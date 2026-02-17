@@ -1,17 +1,60 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Form, Row, Col, Button, InputGroup } from "react-bootstrap";
-import { BsCalendar, BsClock } from "react-icons/bs";
-import { IoMdClose } from "react-icons/io";
+import assignments from "@/app/(kambaz)/database/assignments.json";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+
+  // Find the assignment by ID
+  const assignment = assignments.find((a) => a._id === aid);
+
+  if (!assignment) {
+    return (
+      <div id="wd-assignments-editor" className="p-4">
+        <div className="alert alert-danger">Assignment not found</div>
+      </div>
+    );
+  }
+
+  // Parse "May 8 at 11:59pm" format to "2024-05-08T23:59"
+  const parseToDateTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return "";
+    const [datePart, timePart] = dateTimeStr.split(" at ");
+    const monthDay = datePart.trim();
+    const time = timePart.trim();
+
+    // Convert "May 8" to month-day, then format as ISO
+    // Use current year dynamically instead of hardcoded 2024
+    const currentYear = new Date().getFullYear();
+    const date = new Date(`${monthDay} ${currentYear}`);
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    // Convert "11:59pm" to 24-hour format
+    const timeMatch = time.match(/(\d{1,2}):(\d{2})(am|pm)/i);
+    if (!timeMatch) return "";
+
+    let hours = parseInt(timeMatch[1]);
+    const minutes = timeMatch[2];
+    const isPm = timeMatch[3].toLowerCase() === "pm";
+
+    if (isPm && hours !== 12) hours += 12;
+    if (!isPm && hours === 12) hours = 0;
+
+    const hoursFormatted = String(hours).padStart(2, "0");
+
+    return `${currentYear}-${month}-${day}T${hoursFormatted}:${minutes}`;
+  };
   return (
-    <div id="wd-assignments-editor">
-      <div className="p-4" style={{ width: 720 }}>
+    <div id="wd-assignments-editor" className="p-4">
+      <div style={{ maxWidth: 720 }}>
         <Form>
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Assignment Name</Form.Label>
-            <Form.Control id="wd-name" defaultValue="A1 - ENV + HTML" />
+            <Form.Control id="wd-name" defaultValue={assignment.title} />
           </Form.Group>
 
           <Form.Group className="mb-4">
@@ -19,14 +62,7 @@ export default function AssignmentEditor() {
               id="wd-description"
               as="textarea"
               rows={8}
-              defaultValue="The assignment is available online
-Submit a link to the landing page of your Web application running on Netlify.
-The landing page should include the following:
-• Your full name and section
-• Links to each of the lab assignments
-• Link the Kambas application
-• Links to all relevant source code repositories
-The Kambas application should include a link to navigate back to the landing page."
+              defaultValue={assignment.description}
             />
           </Form.Group>
 
@@ -35,7 +71,11 @@ The Kambas application should include a link to navigate back to the landing pag
               <Form.Label>Points</Form.Label>
             </Col>
             <Col md={9}>
-              <Form.Control id="wd-points" type="number" defaultValue={100} />
+              <Form.Control
+                id="wd-points"
+                type="number"
+                defaultValue={assignment.points}
+              />
             </Col>
           </Row>
 
@@ -134,7 +174,7 @@ The Kambas application should include a link to navigate back to the landing pag
                     <Form.Control
                       id="wd-due-date-time"
                       type="datetime-local"
-                      defaultValue="2024-05-13T23:59"
+                      defaultValue={parseToDateTime(assignment.due)}
                     />
                   </InputGroup>
                 </Form.Group>
@@ -146,8 +186,8 @@ The Kambas application should include a link to navigate back to the landing pag
                       <InputGroup>
                         <Form.Control
                           id="wd-available-from"
-                          type="date"
-                          defaultValue="2024-05-06"
+                          type="datetime-local"
+                          defaultValue={parseToDateTime(assignment.available)}
                         />
                       </InputGroup>
                     </Form.Group>
@@ -158,8 +198,8 @@ The Kambas application should include a link to navigate back to the landing pag
                       <InputGroup>
                         <Form.Control
                           id="wd-available-until"
-                          type="date"
-                          defaultValue="2024-05-20"
+                          type="datetime-local"
+                          defaultValue={parseToDateTime(assignment.until)}
                         />
                       </InputGroup>
                     </Form.Group>
@@ -172,8 +212,24 @@ The Kambas application should include a link to navigate back to the landing pag
           <hr />
 
           <div className="d-flex justify-content-end gap-2">
-            <Button variant="secondary">Cancel</Button>
-            <Button variant="danger">Save</Button>
+            <Link href={`/courses/${cid}/assignments`}>
+              <Button
+                variant="secondary"
+                id="wd-cancel-button"
+                className="text-decoration-none"
+              >
+                Cancel
+              </Button>
+            </Link>
+            <Link href={`/courses/${cid}/assignments`}>
+              <Button
+                variant="danger"
+                id="wd-save-button"
+                className="text-decoration-none"
+              >
+                Save
+              </Button>
+            </Link>
           </div>
         </Form>
       </div>
