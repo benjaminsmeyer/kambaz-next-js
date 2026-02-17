@@ -4,6 +4,22 @@ import * as db from "../../../../database";
 import { useParams } from "next/navigation";
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
+
+interface User {
+  _id: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dob: string;
+  role: string;
+  loginId: string;
+  section: string;
+  lastActivity: string;
+  totalActivity: string;
+}
+
 export default function PeopleTable() {
   const { cid } = useParams();
   const { users, enrollments } = db;
@@ -28,8 +44,7 @@ export default function PeopleTable() {
                   enrollment.user === usr._id && enrollment.course === cid,
               ),
             )
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((user: any) => (
+            .map((user: User) => (
               <tr key={user._id}>
                 <td className="wd-full-name text-nowrap">
                   <FaUserCircle className="me-2 fs-1 text-secondary" />

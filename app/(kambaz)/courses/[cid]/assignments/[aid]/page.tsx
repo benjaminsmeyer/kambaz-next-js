@@ -27,7 +27,9 @@ export default function AssignmentEditor() {
     const time = timePart.trim();
 
     // Convert "May 8" to month-day, then format as ISO
-    const date = new Date(`${monthDay} 2024`);
+    // Use current year dynamically instead of hardcoded 2024
+    const currentYear = new Date().getFullYear();
+    const date = new Date(`${monthDay} ${currentYear}`);
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
 
@@ -44,7 +46,7 @@ export default function AssignmentEditor() {
 
     const hoursFormatted = String(hours).padStart(2, "0");
 
-    return `2024-${month}-${day}T${hoursFormatted}:${minutes}`;
+    return `${currentYear}-${month}-${day}T${hoursFormatted}:${minutes}`;
   };
   return (
     <div id="wd-assignments-editor" className="p-4">
@@ -195,7 +197,7 @@ export default function AssignmentEditor() {
                       <Form.Label>Until</Form.Label>
                       <InputGroup>
                         <Form.Control
-                          id="wd-available-from"
+                          id="wd-available-until"
                           type="datetime-local"
                           defaultValue={parseToDateTime(assignment.until)}
                         />

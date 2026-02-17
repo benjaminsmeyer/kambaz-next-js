@@ -73,7 +73,7 @@ export default function Lab3() {
       <Square>4</Square>
       <hr />
       <Highlight>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit ratione
         eaque illo minus cum, saepe totam vel nihil repellat nemo explicabo
         excepturi consectetur. Modi omnis minus sequi maiores, provident
         voluptates.
