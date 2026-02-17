@@ -28,6 +28,7 @@ export default function PeopleTable() {
                   enrollment.user === usr._id && enrollment.course === cid,
               ),
             )
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((user: any) => (
               <tr key={user._id}>
                 <td className="wd-full-name text-nowrap">
