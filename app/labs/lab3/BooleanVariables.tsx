@@ -18,7 +18,7 @@ export default function BooleanVariables() {
       true2 = {true2 + ""} <br />
       true3 = {true3 + ""} <br />
       true4 = {true4 + ""} <br />
-      false4 = {false4 + ""} <br />
+      true5 = {true5 + ""} <br />
       false3 = {false3 + ""} <hr />
     </div>
   );
