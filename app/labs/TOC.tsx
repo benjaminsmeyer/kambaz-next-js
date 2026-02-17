@@ -10,7 +10,7 @@ export default function TOC() {
         <NavLink
           href="/labs"
           as={Link}
-          className={`nav-link ${pathname === "/labs" ? "active" : ""}`}
+          className={`nav-link ${pathname.endsWith("labs") ? "active" : ""}`}
         >
           Labs
         </NavLink>
