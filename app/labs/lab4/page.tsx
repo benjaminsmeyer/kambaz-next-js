@@ -15,6 +15,7 @@ import Link from "next/link";
 import store from "./store";
 import { Provider } from "react-redux";
 import ReactContextExamples from "./react-context/page";
+import ZustandExamples from "./zustand/page";
 
 export default function Lab4() {
   function sayHello() {
@@ -41,6 +42,10 @@ export default function Lab4() {
         <Link href="./lab4/react-context">React Context Examples</Link>
         <hr />
         <ReactContextExamples />
+        <hr />
+        <Link href="./lab4/zustand">Zustand Examples</Link>
+        <hr />
+        <ZustandExamples />
       </div>
     </Provider>
   );
