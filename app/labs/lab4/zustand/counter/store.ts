@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 // Define the counter state
-export interface CounterState {
+interface CounterState {
   count: number;
   increase: (by: number) => void;
   decrease: (by: number) => void;
