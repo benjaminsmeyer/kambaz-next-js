@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -46,6 +46,14 @@ export default function Dashboard() {
   const visibleCourses = showAllCourses
     ? courses
     : courses.filter((course: any) => isEnrolled(course._id));
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.replace("/account/signin");
+    }
+  }, [currentUser, router]);
+
+  if (!currentUser) return null;
 
   return (
     <div id="wd-dashboard">
