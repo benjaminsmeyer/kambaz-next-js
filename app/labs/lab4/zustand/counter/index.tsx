@@ -1,10 +1,10 @@
 "use client";
 import { useCounterStore } from "./store";
-import { CounterState } from "./store";
 
 export default function ZustandCounter() {
   const { count, increase, decrease, setCount, reset } = useCounterStore(
-    (state: CounterState) => state,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (state: any) => state,
   );
 
   return (
