@@ -73,12 +73,10 @@ export default function Assignments() {
           <Button variant="secondary" id="wd-add-assignment-group">
             <FaPlus className="me-1" /> Group
           </Button>
-          <Link
-            href={`/courses/${cid}/assignments/new`}
-            className="btn btn-danger"
-            id="wd-add-assignment"
-          >
-            <FaPlus className="me-1" /> Assignment
+          <Link href={`/courses/${cid}/assignments/new`}>
+            <Button variant="danger" id="wd-add-assignment">
+              <FaPlus className="me-1" /> Assignment
+            </Button>
           </Link>
         </div>
       </div>
