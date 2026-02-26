@@ -15,7 +15,9 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
   const router = useRouter();
   const { courses } = useSelector((state: RootState) => state.coursesReducer);
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+  ) as { currentUser: any };
   const enrolled = useSelector((state: RootState) =>
     selectIsEnrolled(state, currentUser?._id, cid as string),
   );
