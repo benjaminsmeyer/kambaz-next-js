@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { FormControl, Button } from "react-bootstrap";
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
+  const router = useRouter();
   const signin = () => {
     const user = db.users.find(
       (u: any) =>
@@ -19,7 +20,7 @@ export default function Signin() {
     );
     if (!user) return;
     dispatch(setCurrentUser(user));
-    redirect("/dashboard");
+    router.push("/dashboard");
   };
   return (
     <div id="wd-signin-screen">
