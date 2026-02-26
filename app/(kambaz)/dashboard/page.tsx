@@ -184,7 +184,7 @@ export default function Dashboard() {
                   {canManageCourses && (
                     <>
                       <button
-                        id={`wd-edit-course-click-${course._id}`}
+                        id="wd-edit-course-click"
                         onClick={() => setCourse(course)}
                         className="btn btn-warning"
                       >
