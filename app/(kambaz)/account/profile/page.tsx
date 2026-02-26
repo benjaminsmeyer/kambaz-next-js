@@ -1,24 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
 import { Button, FormControl } from "react-bootstrap";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
+  const router = useRouter();
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   );
   const fetchProfile = () => {
-    if (!currentUser) return redirect("/account/signin");
+    if (!currentUser) {
+      router.replace("/account/signin");
+      return;
+    }
     setProfile(currentUser);
   };
   const signout = () => {
     dispatch(setCurrentUser(null));
-    redirect("/account/signin");
+    router.replace("/account/signin");
   };
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -41,6 +45,7 @@ export default function Profile() {
           <FormControl
             id="wd-password"
             className="mb-2"
+            type="password"
             defaultValue={profile.password}
             onChange={(e) =>
               setProfile({ ...profile, password: e.target.value })
@@ -78,6 +83,7 @@ export default function Profile() {
           <select
             className="form-control mb-2"
             id="wd-role"
+            value={profile.role || "USER"}
             onChange={(e) => setProfile({ ...profile, role: e.target.value })}
           >
             <option value="USER">User</option>
