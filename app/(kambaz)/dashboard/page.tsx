@@ -131,6 +131,7 @@ export default function Dashboard() {
                 >
                   <CardImg
                     src={course.image || "/images/reactjs.jpg"}
+                    alt={course.name}
                     variant="top"
                     width="100%"
                     height={160}
@@ -183,7 +184,7 @@ export default function Dashboard() {
                   {canManageCourses && (
                     <>
                       <button
-                        id="wd-edit-course-click"
+                        id={`wd-edit-course-click-${course._id}`}
                         onClick={() => setCourse(course)}
                         className="btn btn-warning"
                       >
@@ -192,7 +193,7 @@ export default function Dashboard() {
                       <button
                         onClick={() => dispatch(deleteCourse(course._id))}
                         className="btn btn-danger"
-                        id="wd-delete-course-click"
+                        id={`wd-delete-course-click-${course._id}`}
                       >
                         Delete
                       </button>

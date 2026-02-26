@@ -18,7 +18,7 @@ export default function TodoForm() {
         Update
       </Button>
       <FormControl
-        defaultValue={todo.title}
+        value={todo.title}
         onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}
       />
     </ListGroupItem>

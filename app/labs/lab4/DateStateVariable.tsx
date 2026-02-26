@@ -3,9 +3,10 @@ import { FormControl } from "react-bootstrap";
 export default function DateStateVariable() {
   const [startDate, setStartDate] = useState(new Date());
   const dateObjectToHtmlDateString = (date: Date) => {
-    return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? 0 : ""}${
-      date.getMonth() + 1
-    }-${date.getDate() + 1 < 10 ? 0 : ""}${date.getDate() + 1}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
   return (
     <div id="wd-date-state-variables">

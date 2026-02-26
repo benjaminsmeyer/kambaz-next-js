@@ -9,11 +9,11 @@ export default function TodoItem({ todo }: { todo: any }) {
     <ListGroupItem key={todo.id}>
       <Button
         onClick={() => dispatch(deleteTodo(todo.id))}
-        id="wd-delete-todo-click"
+        id={`wd-delete-todo-click-${todo.id}`}
       >
         Delete
       </Button>
-      <Button onClick={() => dispatch(setTodo(todo))} id="wd-set-todo-click">
+      <Button onClick={() => dispatch(setTodo(todo))} id={`wd-set-todo-click-${todo.id}`}>
         Edit
       </Button>
       {todo.title}

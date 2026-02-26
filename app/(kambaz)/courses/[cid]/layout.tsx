@@ -51,7 +51,7 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
       </h2>
       <hr />
       <div className="d-flex">
-        <div className={`${showNav ? "d-none d-md-block" : "d-none"}`}>
+        <div className={`${showNav ? "d-block" : "d-none"} d-md-block`}>
           <CourseNavigation />
         </div>
         <div className="flex-fill">{children}</div>
