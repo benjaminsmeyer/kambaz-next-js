@@ -11,6 +11,7 @@ export default function ArrayStateVariable() {
   };
   const deleteElement = (index: number) => {
     setArray(array.filter((item, i) => i !== index));
+  };
   return (
     <div id="wd-array-state-variables">
       <h2>Array State Variable</h2>
