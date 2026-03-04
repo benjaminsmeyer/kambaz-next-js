@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FaCaretDown, FaPlus } from "react-icons/fa6";
+import { FaCaretDown, FaPlus, FaTrash } from "react-icons/fa6";
 import { BsSearch, BsGripVertical } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
@@ -11,18 +12,54 @@ import {
   InputGroup,
   ListGroup,
   ListGroupItem,
+  Modal,
 } from "react-bootstrap";
 import GreenCheckmark from "../modules/GreenCheckmark";
 import { MdAssignment } from "react-icons/md";
-import assignments from "@/app/(kambaz)/database/assignments.json";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store";
+import { deleteAssignment } from "./reducer";
+import { useState } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
+  const dispatch = useDispatch();
+
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer,
+  );
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+  ) as any;
+  const canEditAssignments = currentUser && currentUser.role !== "STUDENT";
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(
+    null,
+  );
 
   // Filter assignments for the current course
   const courseAssignments = assignments.filter(
     (assignment) => assignment.course === cid,
   );
+
+  const handleDeleteClick = (assignmentId: string) => {
+    setAssignmentToDelete(assignmentId);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (assignmentToDelete) {
+      dispatch(deleteAssignment(assignmentToDelete));
+    }
+    setShowDeleteDialog(false);
+    setAssignmentToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+    setAssignmentToDelete(null);
+  };
 
   return (
     <div id="wd-assignments" className="p-4">
@@ -38,12 +75,18 @@ export default function Assignments() {
           />
         </InputGroup>
         <div className="d-flex gap-2">
-          <Button variant="secondary" id="wd-add-assignment-group">
-            <FaPlus className="me-1" /> Group
-          </Button>
-          <Button variant="danger" id="wd-add-assignment">
-            <FaPlus className="me-1" /> Assignment
-          </Button>
+          {canEditAssignments && (
+            <>
+              <Button variant="secondary" id="wd-add-assignment-group">
+                <FaPlus className="me-1" /> Group
+              </Button>
+              <Link href={`/courses/${cid}/assignments/new`}>
+                <Button variant="danger" id="wd-add-assignment">
+                  <FaPlus className="me-1" /> Assignment
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -62,8 +105,12 @@ export default function Assignments() {
               <span className="badge rounded-pill border border-dark text-dark bg-transparent px-3 py-2">
                 40% of Total
               </span>
-              <FaPlus />
-              <FaEllipsisV />
+              {canEditAssignments && (
+                <>
+                  <FaPlus />
+                  <FaEllipsisV />
+                </>
+              )}
             </div>
           </div>
         </ListGroupItem>
@@ -91,13 +138,41 @@ export default function Assignments() {
                 </div>
               </div>
               <div className="d-flex align-items-center gap-2 flex-shrink-0">
+                {canEditAssignments && (
+                  <Button
+                    className="btn btn-link text-danger p-0 border-0"
+                    onClick={() => handleDeleteClick(assignment._id)}
+                    id={`wd-delete-assignment-${assignment._id}`}
+                    style={{ background: "none" }}
+                  >
+                    <FaTrash className="fs-5" />
+                  </Button>
+                )}
                 <GreenCheckmark />
-                <IoEllipsisVertical className="fs-4" />
+                {canEditAssignments && <IoEllipsisVertical className="fs-4" />}
               </div>
             </div>
           </ListGroupItem>
         ))}
       </ListGroup>
+
+      {/* Delete Confirmation Dialog */}
+      <Modal show={showDeleteDialog} onHide={handleCancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Assignment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove this assignment?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

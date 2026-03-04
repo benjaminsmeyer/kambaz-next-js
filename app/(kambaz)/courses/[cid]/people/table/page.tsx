@@ -4,9 +4,17 @@ import * as db from "../../../../database";
 import { useParams } from "next/navigation";
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store";
 export default function PeopleTable() {
   const { cid } = useParams();
-  const { users, enrollments } = db;
+  const { users } = db;
+  const { byUser } = useSelector((state: RootState) => state.enrollmentsReducer);
+
+  const enrolledUserIds = Object.keys(byUser).filter((userId) =>
+    byUser[userId].includes(cid as string),
+  );
+
   return (
     <div id="wd-people-table">
       <Table striped>
@@ -22,12 +30,7 @@ export default function PeopleTable() {
         </thead>
         <tbody>
           {users
-            .filter((usr) =>
-              enrollments.some(
-                (enrollment) =>
-                  enrollment.user === usr._id && enrollment.course === cid,
-              ),
-            )
+            .filter((usr) => enrolledUserIds.includes(usr._id))
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((user: any) => (
               <tr key={user._id}>
