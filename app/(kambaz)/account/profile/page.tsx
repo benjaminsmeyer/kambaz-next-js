@@ -20,6 +20,9 @@ export default function Profile() {
     }
     setProfile(currentUser);
   };
+  const saveProfile = () => {
+    dispatch(setCurrentUser(profile));
+  };
   const signout = () => {
     dispatch(setCurrentUser(null));
     router.replace("/account/signin");
@@ -91,6 +94,13 @@ export default function Profile() {
             <option value="FACULTY">Faculty</option>
             <option value="STUDENT">Student</option>
           </select>
+          <Button
+            onClick={saveProfile}
+            className="w-100 mb-2"
+            id="wd-save-profile-btn"
+          >
+            Save
+          </Button>
           <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
             Sign out
           </Button>
