@@ -27,7 +27,7 @@ export default function Profile() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProfile();
-  }, []);
+  }, [currentUser]);
 
   return (
     <div id="wd-profile-screen" className="p-4" style={{ maxWidth: 400 }}>
