@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Form, Row, Col, Button, InputGroup } from "react-bootstrap";
 import { useState, useEffect } from "react";
@@ -16,6 +15,12 @@ export default function AssignmentEditor() {
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer,
   );
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) as any;
+  const canEditAssignments = currentUser && currentUser.role !== "STUDENT";
+  const isReadOnly = !canEditAssignments;
 
   // Find the assignment by ID (if editing existing)
   const existingAssignment =
@@ -94,6 +99,14 @@ export default function AssignmentEditor() {
 
   // Load existing assignment data when editing
   useEffect(() => {
+    if (!currentUser) {
+      router.replace("/account/signin");
+      return;
+    }
+    if (aid === "new" && isReadOnly) {
+      router.replace(`/courses/${cid}/assignments`);
+      return;
+    }
     if (existingAssignment) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setAssignment({
@@ -105,9 +118,12 @@ export default function AssignmentEditor() {
         until: parseToDateTime(existingAssignment.until) || "",
       });
     }
-  }, [existingAssignment]);
+  }, [aid, cid, currentUser, existingAssignment, isReadOnly, router]);
+
+  if (!currentUser) return null;
 
   const handleSave = () => {
+    if (isReadOnly) return;
     // Convert datetime-local format back to display format before saving
     const formattedAssignment = {
       title: assignment.title,
@@ -142,6 +158,7 @@ export default function AssignmentEditor() {
             <Form.Control
               id="wd-name"
               value={assignment.title}
+              readOnly={isReadOnly}
               onChange={(e) =>
                 setAssignment({ ...assignment, title: e.target.value })
               }
@@ -154,6 +171,7 @@ export default function AssignmentEditor() {
               as="textarea"
               rows={8}
               value={assignment.description}
+              readOnly={isReadOnly}
               onChange={(e) =>
                 setAssignment({ ...assignment, description: e.target.value })
               }
@@ -169,6 +187,7 @@ export default function AssignmentEditor() {
                 id="wd-points"
                 type="number"
                 value={assignment.points}
+                readOnly={isReadOnly}
                 onChange={(e) =>
                   setAssignment({
                     ...assignment,
@@ -184,7 +203,11 @@ export default function AssignmentEditor() {
               <Form.Label>Assignment Group</Form.Label>
             </Col>
             <Col md={9}>
-              <Form.Select id="wd-group" defaultValue="ASSIGNMENTS">
+              <Form.Select
+                id="wd-group"
+                defaultValue="ASSIGNMENTS"
+                disabled={isReadOnly}
+              >
                 <option>ASSIGNMENTS</option>
                 <option>QUIZZES</option>
                 <option>EXAMS</option>
@@ -198,7 +221,11 @@ export default function AssignmentEditor() {
               <Form.Label>Display Grade as</Form.Label>
             </Col>
             <Col md={9}>
-              <Form.Select id="wd-display-grade-as" defaultValue="Percentage">
+              <Form.Select
+                id="wd-display-grade-as"
+                defaultValue="Percentage"
+                disabled={isReadOnly}
+              >
                 <option>Percentage</option>
                 <option>Points</option>
                 <option>Letter Grade</option>
@@ -216,6 +243,7 @@ export default function AssignmentEditor() {
                   id="wd-submission-type"
                   defaultValue="Online"
                   className="mb-3"
+                  disabled={isReadOnly}
                 >
                   <option>Online</option>
                   <option>In Person</option>
@@ -230,27 +258,32 @@ export default function AssignmentEditor() {
                     type="checkbox"
                     id="wd-text-entry"
                     label="Text Entry"
+                    disabled={isReadOnly}
                   />
                   <Form.Check
                     type="checkbox"
                     id="wd-website-url"
                     label="Website URL"
                     defaultChecked
+                    disabled={isReadOnly}
                   />
                   <Form.Check
                     type="checkbox"
                     id="wd-media-recordings"
                     label="Media Recordings"
+                    disabled={isReadOnly}
                   />
                   <Form.Check
                     type="checkbox"
                     id="wd-student-annotation"
                     label="Student Annotation"
+                    disabled={isReadOnly}
                   />
                   <Form.Check
                     type="checkbox"
                     id="wd-file-upload"
                     label="File Uploads"
+                    disabled={isReadOnly}
                   />
                 </div>
               </div>
@@ -265,7 +298,7 @@ export default function AssignmentEditor() {
               <div className="border rounded p-3">
                 <Form.Group className="mb-3">
                   <Form.Label>Assign to</Form.Label>
-                  <Form.Control defaultValue="Everyone" />
+                  <Form.Control defaultValue="Everyone" readOnly={isReadOnly} />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -275,6 +308,7 @@ export default function AssignmentEditor() {
                       id="wd-due-date-time"
                       type="datetime-local"
                       value={assignment.due}
+                      readOnly={isReadOnly}
                       onChange={(e) =>
                         setAssignment({ ...assignment, due: e.target.value })
                       }
@@ -291,6 +325,7 @@ export default function AssignmentEditor() {
                           id="wd-available-from"
                           type="datetime-local"
                           value={assignment.available}
+                          readOnly={isReadOnly}
                           onChange={(e) =>
                             setAssignment({
                               ...assignment,
@@ -309,6 +344,7 @@ export default function AssignmentEditor() {
                           id="wd-available-until"
                           type="datetime-local"
                           value={assignment.until}
+                          readOnly={isReadOnly}
                           onChange={(e) =>
                             setAssignment({
                               ...assignment,
@@ -332,11 +368,13 @@ export default function AssignmentEditor() {
               id="wd-cancel-button"
               onClick={handleCancel}
             >
-              Cancel
+              {isReadOnly ? "Back" : "Cancel"}
             </Button>
-            <Button variant="danger" id="wd-save-button" onClick={handleSave}>
-              Save
-            </Button>
+            {!isReadOnly && (
+              <Button variant="danger" id="wd-save-button" onClick={handleSave}>
+                Save
+              </Button>
+            )}
           </div>
         </Form>
       </div>

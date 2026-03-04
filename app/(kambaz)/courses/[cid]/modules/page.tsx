@@ -15,20 +15,28 @@ export default function Modules() {
   const dispatch = useDispatch();
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+  ) as any;
+  const canEditModules = currentUser && currentUser.role !== "STUDENT";
   return (
     <div>
-      <ModulesControls
-        setModuleName={setModuleName}
-        moduleName={moduleName}
-        addModule={() => {
-          dispatch(addModule({ name: moduleName, course: cid }));
-          setModuleName("");
-        }}
-      />
-      <br />
-      <br />
-      <br />
-      <br />
+      {canEditModules && (
+        <>
+          <ModulesControls
+            setModuleName={setModuleName}
+            moduleName={moduleName}
+            addModule={() => {
+              dispatch(addModule({ name: moduleName, course: cid }));
+              setModuleName("");
+            }}
+          />
+          <br />
+          <br />
+          <br />
+          <br />
+        </>
+      )}
       <ListGroup id="wd-modules" className="rounded-0">
         {modules
           .filter((module: any) => module.course === cid)
@@ -40,9 +48,9 @@ export default function Modules() {
               <div className="wd-title p-3 ps-2 bg-secondary d-flex align-items-center">
                 <BsGripVertical className="me-2 fs-3" />
                 <span className="flex-grow-1">
-                  {!module.editing && module.name}
+                  {(!module.editing || !canEditModules) && module.name}
                 </span>
-                {module.editing && (
+                {module.editing && canEditModules && (
                   <FormControl
                     className="d-inline-block"
                     onChange={(e) =>
@@ -59,13 +67,15 @@ export default function Modules() {
                   />
                 )}
 
-                <ModuleControlButtons
-                  moduleId={module._id}
-                  deleteModule={(moduleId) => {
-                    dispatch(deleteModule(moduleId));
-                  }}
-                  editModule={(moduleId) => dispatch(editModule(moduleId))}
-                />
+                {canEditModules && (
+                  <ModuleControlButtons
+                    moduleId={module._id}
+                    deleteModule={(moduleId) => {
+                      dispatch(deleteModule(moduleId));
+                    }}
+                    editModule={(moduleId) => dispatch(editModule(moduleId))}
+                  />
+                )}
               </div>
               {module.lessons && (
                 <ListGroup className="wd-lessons rounded-0">
@@ -75,7 +85,7 @@ export default function Modules() {
                       className="wd-lesson p-3 ps-1"
                     >
                       <BsGripVertical className="me-2 fs-3" /> {lesson.name}
-                      <LessonControlButtons />
+                      {canEditModules && <LessonControlButtons />}
                     </ListGroupItem>
                   ))}
                 </ListGroup>
