@@ -21,22 +21,21 @@ export default function Modules() {
   const canEditModules = currentUser && currentUser.role !== "STUDENT";
   return (
     <div>
-      {canEditModules && (
-        <>
-          <ModulesControls
-            setModuleName={setModuleName}
-            moduleName={moduleName}
-            addModule={() => {
-              dispatch(addModule({ name: moduleName, course: cid }));
-              setModuleName("");
-            }}
-          />
-          <br />
-          <br />
-          <br />
-          <br />
-        </>
-      )}
+      <>
+        <ModulesControls
+          canManageModules={canEditModules}
+          setModuleName={setModuleName}
+          moduleName={moduleName}
+          addModule={() => {
+            dispatch(addModule({ name: moduleName, course: cid }));
+            setModuleName("");
+          }}
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+      </>
       <ListGroup id="wd-modules" className="rounded-0">
         {modules
           .filter((module: any) => module.course === cid)

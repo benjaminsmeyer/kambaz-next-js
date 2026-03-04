@@ -8,7 +8,7 @@ export default function Home() {
     (state: RootState) => state.accountReducer,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any;
-  const showCourseStatus = currentUser && currentUser.role !== "STUDENT";
+  const isStudent = currentUser?.role === "STUDENT";
 
   return (
     <div id="wd-home">
@@ -16,11 +16,9 @@ export default function Home() {
         <div className="flex-fill me-3">
           <Modules />
         </div>
-        {showCourseStatus && (
-          <div className="d-none d-lg-block">
-            <CourseStatus />
-          </div>
-        )}
+        <div className="d-none d-lg-block">
+          <CourseStatus studentView={isStudent} />
+        </div>
       </div>
     </div>
   );

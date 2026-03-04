@@ -108,7 +108,8 @@ export default function Dashboard() {
       )}
 
       <h2 id="wd-dashboard-published">
-        Published Courses ({visibleCourses.length})
+        {showAllCourses ? "All Published Courses" : "Your Courses"} (
+        {visibleCourses.length})
       </h2>
       <hr />
       <div id="wd-dashboard-courses">
