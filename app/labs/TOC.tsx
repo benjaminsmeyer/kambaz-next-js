@@ -15,7 +15,7 @@ export default function TOC() {
           Labs
         </NavLink>
       </NavItem>
-      {[1, 2, 3, 4].map((labNumber) => {
+      {[1, 2, 3, 4, 5].map((labNumber) => {
         return (
           <NavItem key={`lab-${labNumber}`}>
             <NavLink
