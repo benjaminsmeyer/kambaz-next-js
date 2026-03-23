@@ -16,7 +16,7 @@ import {
 } from "react-bootstrap";
 import * as client from "../courses/client";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCourse, updateCourse, setCourses } from "../courses/reducer";
+import { deleteCourse, setCourses } from "../courses/reducer";
 import { RootState } from "../store";
 import { enroll, selectUserCourseIds, unenroll } from "../enrollments/reducer";
 
@@ -41,17 +41,22 @@ export default function Dashboard() {
     description: "New Description",
   });
 
-  const fetchCourses = async () => {
-    try {
-      const courses = await client.findMyCourses();
-      dispatch(setCourses(courses));
-    } catch (error) {
-      console.error(error);
-    }
-  };
   useEffect(() => {
+    const fetchCourses = async () => {
+      if (!currentUser) return;
+      try {
+        const courses = showAllCourses
+          ? await client.fetchAllCourses()
+          : await client.findMyCourses();
+        dispatch(setCourses(courses));
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchCourses();
-  }, [currentUser]);
+    // dispatch from react-redux is stable; exclude it to keep deps consistent through refresh edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, showAllCourses]);
 
   const onUpdateCourse = async () => {
     await client.updateCourse(course);
@@ -82,7 +87,7 @@ export default function Dashboard() {
   };
 
   const onDeleteCourse = async (courseId: string) => {
-    const status = await client.deleteCourse(courseId);
+    await client.deleteCourse(courseId);
     dispatch(setCourses(courses.filter((course) => course._id !== courseId)));
   };
 
