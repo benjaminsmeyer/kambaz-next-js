@@ -18,8 +18,12 @@ import GreenCheckmark from "../modules/GreenCheckmark";
 import { MdAssignment } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
-import { deleteAssignment } from "./reducer";
-import { useState } from "react";
+import { deleteAssignment, setAssignments } from "./reducer";
+import { useEffect, useState } from "react";
+import {
+  deleteAssignment as deleteAssignmentFromServer,
+  findAssignmentsForCourse,
+} from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -48,9 +52,29 @@ export default function Assignments() {
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
+  useEffect(() => {
+    const loadAssignments = async () => {
+      if (!cid) return;
+      try {
+        const assignmentsForCourse = await findAssignmentsForCourse(
+          cid as string,
+        );
+        dispatch(setAssignments(assignmentsForCourse));
+      } catch (error) {
+        console.error("Failed to load assignments", error);
+      }
+    };
+    loadAssignments();
+  }, [cid, dispatch]);
+
+  const handleConfirmDelete = async () => {
     if (assignmentToDelete) {
-      dispatch(deleteAssignment(assignmentToDelete));
+      try {
+        await deleteAssignmentFromServer(assignmentToDelete);
+        dispatch(deleteAssignment(assignmentToDelete));
+      } catch (error) {
+        console.error("Failed to delete assignment", error);
+      }
     }
     setShowDeleteDialog(false);
     setAssignmentToDelete(null);
