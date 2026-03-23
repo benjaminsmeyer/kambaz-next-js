@@ -34,7 +34,14 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="https://github.com/benjaminsmeyer">GitHub</NavLink>
+        <NavLink href="https://github.com/benjaminsmeyer/kambaz-node-server-app">
+          Server GitHub Repo
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink href="https://kambaz-node-server-app-beryl-alpha.onrender.com/">
+          Server Root (Render)
+        </NavLink>
       </NavItem>
     </Nav>
   );
