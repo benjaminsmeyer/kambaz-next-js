@@ -18,7 +18,13 @@ import * as client from "../courses/client";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse, setCourses } from "../courses/reducer";
 import { RootState } from "../store";
-import { enroll, selectUserCourseIds, unenroll } from "../enrollments/reducer";
+import {
+  enroll,
+  selectUserCourseIds,
+  setEnrollments,
+  unenroll,
+} from "../enrollments/reducer";
+import * as enrollmentsClient from "../enrollments/client";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -58,6 +64,20 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, showAllCourses]);
 
+  useEffect(() => {
+    const fetchEnrollments = async () => {
+      if (!currentUser) return;
+      try {
+        const enrollments = await enrollmentsClient.findAllEnrollments();
+        dispatch(setEnrollments(enrollments));
+      } catch (error) {
+        console.error("Failed to load enrollments", error);
+      }
+    };
+
+    fetchEnrollments();
+  }, [currentUser, dispatch]);
+
   const onUpdateCourse = async () => {
     await client.updateCourse(course);
     dispatch(
@@ -80,6 +100,22 @@ export default function Dashboard() {
   const visibleCourses = showAllCourses
     ? courses
     : courses.filter((course: any) => isEnrolled(course._id));
+
+  const handleToggleEnrollment = async (courseId: string) => {
+    if (!currentUser) return;
+    try {
+      if (isEnrolled(courseId)) {
+        await enrollmentsClient.unenrollFromCourse(courseId);
+        dispatch(unenroll({ userId: currentUser._id as string, courseId }));
+      } else {
+        const enrollment = await enrollmentsClient.enrollInCourse(courseId);
+        dispatch(enroll(enrollment));
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to toggle enrollment", error);
+    }
+  };
 
   const onAddNewCourse = async () => {
     const newCourse = await client.createCourse(course);
@@ -210,19 +246,7 @@ export default function Dashboard() {
                   {currentUser && (
                     <Button
                       variant={isEnrolled(course._id) ? "danger" : "success"}
-                      onClick={() =>
-                        dispatch(
-                          isEnrolled(course._id)
-                            ? unenroll({
-                                userId: currentUser._id,
-                                courseId: course._id,
-                              })
-                            : enroll({
-                                userId: currentUser._id,
-                                courseId: course._id,
-                              }),
-                        )
-                      }
+                      onClick={() => handleToggleEnrollment(course._id)}
                     >
                       {isEnrolled(course._id) ? "Unenroll" : "Enroll"}
                     </Button>
