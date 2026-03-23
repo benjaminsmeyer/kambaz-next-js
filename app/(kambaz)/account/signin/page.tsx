@@ -1,26 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import * as db from "../../database";
 import { FormControl, Button } from "react-bootstrap";
-
+import * as client from "../client";
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
-  const router = useRouter();
-  const signin = () => {
-    const user = db.users.find(
-      (u: any) =>
-        u.username === credentials.username &&
-        u.password === credentials.password,
-    );
+  const signin = async () => {
+    const user = await client.signin(credentials);
     if (!user) return;
     dispatch(setCurrentUser(user));
-    router.push("/dashboard");
+    redirect("/dashboard");
   };
   return (
     <div id="wd-signin-screen">
@@ -45,12 +39,10 @@ export default function Signin() {
         id="wd-password"
       />
       <Button onClick={signin} id="wd-signin-btn" className="w-100">
-        {" "}
-        Sign in{" "}
+        Sign in
       </Button>
       <Link id="wd-signup-link" href="/account/signup">
-        {" "}
-        Sign up{" "}
+        Sign up
       </Link>
     </div>
   );
