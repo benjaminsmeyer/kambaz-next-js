@@ -2,17 +2,26 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { FormControl } from "react-bootstrap";
 import * as client from "../client";
 
 export default function Signup() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+  );
+
+  useEffect(() => {
+    if (currentUser) {
+      router.replace("/account/profile");
+    }
+  }, [currentUser, router]);
 
   const signup = async () => {
     setError("");
