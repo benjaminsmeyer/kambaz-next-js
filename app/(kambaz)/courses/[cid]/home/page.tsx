@@ -8,7 +8,7 @@ export default function Home() {
     (state: RootState) => state.accountReducer,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any;
-  const isStudent = currentUser?.role === "STUDENT";
+  const canManageCourse = ["FACULTY", "TA"].includes(currentUser?.role);
 
   return (
     <div id="wd-home">
@@ -17,7 +17,7 @@ export default function Home() {
           <Modules />
         </div>
         <div className="d-none d-lg-block">
-          <CourseStatus studentView={isStudent} />
+          <CourseStatus studentView={!canManageCourse} />
         </div>
       </div>
     </div>

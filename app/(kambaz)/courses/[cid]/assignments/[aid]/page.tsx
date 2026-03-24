@@ -29,7 +29,7 @@ export default function AssignmentEditor() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditAssignments = currentUser && currentUser.role !== "STUDENT";
+  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
   const isReadOnly = !canEditAssignments;
   const existingAssignment =
     aid !== "new" ? assignments.find((a: any) => a._id === aid) : null;
@@ -155,7 +155,7 @@ export default function AssignmentEditor() {
     };
 
     loadAssignment();
-  }, [aid, cid, currentUser, dispatch, isReadOnly, router]);
+  }, [aid, cid, currentUser, dispatch, existingAssignment, isReadOnly, router]);
 
   if (!currentUser) return null;
 

@@ -35,7 +35,7 @@ export default function Assignments() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditAssignments = currentUser && currentUser.role !== "STUDENT";
+  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(
@@ -48,6 +48,7 @@ export default function Assignments() {
   );
 
   const handleDeleteClick = (assignmentId: string) => {
+    if (!canEditAssignments) return;
     setAssignmentToDelete(assignmentId);
     setShowDeleteDialog(true);
   };
@@ -68,6 +69,11 @@ export default function Assignments() {
   }, [cid, dispatch]);
 
   const handleConfirmDelete = async () => {
+    if (!canEditAssignments) {
+      setShowDeleteDialog(false);
+      setAssignmentToDelete(null);
+      return;
+    }
     if (assignmentToDelete) {
       try {
         await deleteAssignmentFromServer(assignmentToDelete);

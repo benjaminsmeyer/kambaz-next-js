@@ -2,48 +2,86 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
 import { FormControl } from "react-bootstrap";
 import * as client from "../client";
 export default function Profile() {
-  const [profile, setProfile] = useState<any>({});
+  const [profile, setProfile] = useState<any>(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   );
   const updateProfile = async () => {
-    const updatedProfile = await client.updateUser(profile);
-    dispatch(setCurrentUser(updatedProfile));
+    if (!profile?._id) {
+      setError("Unable to update profile: missing user id.");
+      return;
+    }
+    setError("");
+    setSuccess("");
+    try {
+      const updatedProfile = await client.updateUser(profile);
+      dispatch(setCurrentUser(updatedProfile));
+      setProfile(updatedProfile);
+      setSuccess("Profile updated successfully.");
+    } catch {
+      setError("Unable to update profile. Please try again.");
+    }
   };
-  const fetchProfile = () => {
+  const fetchProfile = async () => {
     if (!currentUser) {
       router.replace("/account/signin");
       return;
     }
-    setProfile(currentUser);
+    try {
+      const serverProfile = await client.profile();
+      setProfile(serverProfile);
+    } catch {
+      setProfile(currentUser);
+    }
   };
   const signout = async () => {
-    await client.signout();
-    dispatch(setCurrentUser(null));
-    redirect("/account/signin");
+    setError("");
+    setSuccess("");
+    try {
+      await client.signout();
+      dispatch(setCurrentUser(null));
+      router.push("/account/signin");
+    } catch (e: any) {
+      setError(
+        e?.response?.data?.message || "Unable to sign out. Please try again.",
+      );
+    }
   };
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProfile();
+    // fetchProfile depends on currentUser and router and is intentionally run when currentUser changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (
     <div id="wd-profile-screen" className="p-4" style={{ maxWidth: 400 }}>
       <h1>Profile</h1>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="alert alert-success" role="status">
+          {success}
+        </div>
+      )}
       {profile && (
         <div>
           <FormControl
             id="wd-username"
             className="mb-2"
-            defaultValue={profile.username}
+            value={profile.username || ""}
             onChange={(e) =>
               setProfile({ ...profile, username: e.target.value })
             }
@@ -52,7 +90,7 @@ export default function Profile() {
             id="wd-password"
             className="mb-2"
             type="password"
-            defaultValue={profile.password}
+            value={profile.password || ""}
             onChange={(e) =>
               setProfile({ ...profile, password: e.target.value })
             }
@@ -60,7 +98,7 @@ export default function Profile() {
           <FormControl
             id="wd-firstname"
             className="mb-2"
-            defaultValue={profile.firstName}
+            value={profile.firstName || ""}
             onChange={(e) =>
               setProfile({ ...profile, firstName: e.target.value })
             }
@@ -68,7 +106,7 @@ export default function Profile() {
           <FormControl
             id="wd-lastname"
             className="mb-2"
-            defaultValue={profile.lastName}
+            value={profile.lastName || ""}
             onChange={(e) =>
               setProfile({ ...profile, lastName: e.target.value })
             }
@@ -77,13 +115,13 @@ export default function Profile() {
             id="wd-dob"
             className="mb-2"
             type="date"
-            defaultValue={profile.dob}
+            value={profile.dob || ""}
             onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
           />
           <FormControl
             id="wd-email"
             className="mb-2"
-            defaultValue={profile.email}
+            value={profile.email || ""}
             onChange={(e) => setProfile({ ...profile, email: e.target.value })}
           />
           <select
