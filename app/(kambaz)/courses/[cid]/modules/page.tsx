@@ -18,9 +18,7 @@ export default function Modules() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditModules = ["FACULTY", "ADMIN", "TA"].includes(
-    currentUser?.role,
-  );
+  const canEditModules = ["FACULTY", "ADMIN", "TA"].includes(currentUser?.role);
 
   const onCreateModuleForCourse = async () => {
     if (!canEditModules) return;
