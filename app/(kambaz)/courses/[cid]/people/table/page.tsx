@@ -52,7 +52,7 @@ export default function PeopleTable() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const canManageUsers = currentUser?.role === "FACULTY";
+  const canManageUsers = ["FACULTY", "ADMIN"].includes(currentUser?.role || "");
 
   const loadCourseUsers = useCallback(async () => {
     if (!cid) return;

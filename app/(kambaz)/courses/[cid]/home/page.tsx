@@ -8,7 +8,9 @@ export default function Home() {
     (state: RootState) => state.accountReducer,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any;
-  const canManageCourse = ["FACULTY", "TA"].includes(currentUser?.role);
+  const canManageCourse = ["FACULTY", "ADMIN", "TA"].includes(
+    currentUser?.role,
+  );
 
   return (
     <div id="wd-home">
