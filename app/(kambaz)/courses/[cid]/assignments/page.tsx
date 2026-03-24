@@ -35,7 +35,9 @@ export default function Assignments() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
+  const canEditAssignments = ["FACULTY", "ADMIN", "TA"].includes(
+    currentUser?.role,
+  );
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(
