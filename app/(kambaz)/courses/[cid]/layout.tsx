@@ -6,14 +6,16 @@ import CourseNavigation from "./Navigation";
 import { FaAlignJustify } from "react-icons/fa";
 import Breadcrumb from "./Breadcrumb";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useRouter } from "next/navigation";
 import { RootState } from "../../store";
-import { selectIsEnrolled } from "../../enrollments/reducer";
+import { selectIsEnrolled, setEnrollments } from "../../enrollments/reducer";
+import * as enrollmentsClient from "../../enrollments/client";
 import { useEffect } from "react";
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
   const router = useRouter();
+  const dispatch = useDispatch();
   const { courses } = useSelector((state: RootState) => state.coursesReducer);
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
@@ -23,18 +25,35 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
   );
   const course = courses.find((course: any) => course._id === cid);
   const [showNav, setShowNav] = useState(true);
+  const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadEnrollments = async () => {
+      if (!currentUser) return;
+      try {
+        const enrollments = await enrollmentsClient.findAllEnrollments();
+        dispatch(setEnrollments(enrollments));
+      } catch (error) {
+        console.error("Failed to load enrollments", error);
+      } finally {
+        setEnrollmentsLoaded(true);
+      }
+    };
+
+    loadEnrollments();
+  }, [currentUser, dispatch]);
 
   useEffect(() => {
     if (!currentUser) {
       router.replace("/account/signin");
       return;
     }
-    if (!enrolled) {
+    if (enrollmentsLoaded && !enrolled) {
       router.replace("/dashboard");
     }
-  }, [currentUser, enrolled, router]);
+  }, [currentUser, enrolled, enrollmentsLoaded, router]);
 
-  if (!currentUser || !enrolled) return null;
+  if (!currentUser || !enrollmentsLoaded || !enrolled) return null;
 
   return (
     <div id="wd-courses">

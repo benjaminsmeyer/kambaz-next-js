@@ -1,10 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { Form, Row, Col, Button, InputGroup } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAssignment, updateAssignment } from "../reducer";
+import {
+  addAssignment,
+  setAssignments,
+  updateAssignment as updateAssignmentAction,
+} from "../reducer";
 import { RootState } from "@/app/(kambaz)/store";
+import {
+  createAssignmentForCourse,
+  findAssignmentById,
+  findAssignmentsForCourse,
+  updateAssignment as updateAssignmentOnServer,
+} from "../client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -17,14 +28,10 @@ export default function AssignmentEditor() {
   );
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any;
-  const canEditAssignments = currentUser && currentUser.role !== "STUDENT";
+  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
   const isReadOnly = !canEditAssignments;
-
-  // Find the assignment by ID (if editing existing)
   const existingAssignment =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     aid !== "new" ? assignments.find((a: any) => a._id === aid) : null;
 
   const [assignment, setAssignment] = useState({
@@ -99,30 +106,60 @@ export default function AssignmentEditor() {
 
   // Load existing assignment data when editing
   useEffect(() => {
-    if (!currentUser) {
-      router.replace("/account/signin");
-      return;
-    }
-    if (aid === "new" && isReadOnly) {
-      router.replace(`/courses/${cid}/assignments`);
-      return;
-    }
-    if (existingAssignment) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAssignment({
-        title: existingAssignment.title || "",
-        description: existingAssignment.description || "",
-        points: existingAssignment.points || 100,
-        due: parseToDateTime(existingAssignment.due) || "",
-        available: parseToDateTime(existingAssignment.available) || "",
-        until: parseToDateTime(existingAssignment.until) || "",
-      });
-    }
-  }, [aid, cid, currentUser, existingAssignment, isReadOnly, router]);
+    const loadAssignment = async () => {
+      if (!currentUser) {
+        router.replace("/account/signin");
+        return;
+      }
+      if (aid === "new" && isReadOnly) {
+        router.replace(`/courses/${cid}/assignments`);
+        return;
+      }
+
+      if (!cid) return;
+      try {
+        const assignmentsForCourse = await findAssignmentsForCourse(
+          cid as string,
+        );
+        dispatch(setAssignments(assignmentsForCourse));
+
+        if (aid !== "new") {
+          const assignmentFromServer =
+            assignmentsForCourse.find((a: any) => a._id === aid) ||
+            (await findAssignmentById(aid as string));
+
+          if (assignmentFromServer) {
+            setAssignment({
+              title: assignmentFromServer.title || "",
+              description: assignmentFromServer.description || "",
+              points: assignmentFromServer.points || 100,
+              due: parseToDateTime(assignmentFromServer.due) || "",
+              available: parseToDateTime(assignmentFromServer.available) || "",
+              until: parseToDateTime(assignmentFromServer.until) || "",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load assignment", error);
+        if (existingAssignment) {
+          setAssignment({
+            title: existingAssignment.title || "",
+            description: existingAssignment.description || "",
+            points: existingAssignment.points || 100,
+            due: parseToDateTime(existingAssignment.due) || "",
+            available: parseToDateTime(existingAssignment.available) || "",
+            until: parseToDateTime(existingAssignment.until) || "",
+          });
+        }
+      }
+    };
+
+    loadAssignment();
+  }, [aid, cid, currentUser, dispatch, existingAssignment, isReadOnly, router]);
 
   if (!currentUser) return null;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isReadOnly) return;
     // Convert datetime-local format back to display format before saving
     const formattedAssignment = {
@@ -135,14 +172,24 @@ export default function AssignmentEditor() {
       course: cid,
     };
 
-    if (aid === "new") {
-      // Creating new assignment
-      dispatch(addAssignment(formattedAssignment));
-    } else {
-      // Updating existing assignment
-      dispatch(updateAssignment({ ...formattedAssignment, _id: aid }));
+    try {
+      if (aid === "new") {
+        const created = await createAssignmentForCourse(
+          cid as string,
+          formattedAssignment,
+        );
+        dispatch(addAssignment(created));
+      } else {
+        const updated = await updateAssignmentOnServer(aid as string, {
+          ...formattedAssignment,
+          _id: aid,
+        });
+        dispatch(updateAssignmentAction(updated));
+      }
+      router.push(`/courses/${cid}/assignments`);
+    } catch (error) {
+      console.error("Failed to save assignment", error);
     }
-    router.push(`/courses/${cid}/assignments`);
   };
 
   const handleCancel = () => {

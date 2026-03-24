@@ -3,28 +3,48 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import * as db from "../../database";
+import { RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { FormControl, Button } from "react-bootstrap";
-
+import * as client from "../client";
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
-  const signin = () => {
-    const user = db.users.find(
-      (u: any) =>
-        u.username === credentials.username &&
-        u.password === credentials.password,
-    );
-    if (!user) return;
-    dispatch(setCurrentUser(user));
-    router.push("/dashboard");
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer,
+  );
+
+  useEffect(() => {
+    if (currentUser) {
+      router.replace("/account/profile");
+    }
+  }, [currentUser, router]);
+
+  const signin = async () => {
+    setError("");
+    try {
+      const user = await client.signin(credentials);
+      if (!user) return;
+      dispatch(setCurrentUser(user));
+      router.push("/dashboard");
+    } catch (e: any) {
+      setError(
+        e?.response?.data?.message || "Unable to sign in. Please try again.",
+      );
+    }
   };
+
   return (
     <div id="wd-signin-screen">
       <h1>Sign in</h1>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <FormControl
         defaultValue={credentials.username}
         onChange={(e) =>
@@ -45,12 +65,10 @@ export default function Signin() {
         id="wd-password"
       />
       <Button onClick={signin} id="wd-signin-btn" className="w-100">
-        {" "}
-        Sign in{" "}
+        Sign in
       </Button>
       <Link id="wd-signup-link" href="/account/signup">
-        {" "}
-        Sign up{" "}
+        Sign up
       </Link>
     </div>
   );
