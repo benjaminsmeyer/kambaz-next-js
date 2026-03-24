@@ -29,9 +29,7 @@ export default function AssignmentEditor() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditAssignments = ["FACULTY", "ADMIN", "TA"].includes(
-    currentUser?.role,
-  );
+  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
   const isReadOnly = !canEditAssignments;
   const existingAssignment =
     aid !== "new" ? assignments.find((a: any) => a._id === aid) : null;
