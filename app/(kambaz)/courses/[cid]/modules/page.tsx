@@ -18,7 +18,7 @@ export default function Modules() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditModules = ["FACULTY", "TA"].includes(currentUser?.role);
+  const canEditModules = ["FACULTY", "TA", "ADMIN"].includes(currentUser?.role);
 
   const onCreateModuleForCourse = async () => {
     if (!canEditModules) return;
@@ -28,14 +28,12 @@ export default function Modules() {
     dispatch(setModules([...modules, module]));
   };
   const onRemoveModule = async (moduleId: string) => {
-    if (!canEditModules) return;
-    await client.deleteModule(moduleId);
+    await client.deleteModule(cid as string, moduleId);
     dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
   };
 
   const onUpdateModule = async (module: any) => {
-    if (!canEditModules) return;
-    await client.updateModule(module);
+    await client.updateModule(cid as string, module);
     const newModules = modules.map((m: any) =>
       m._id === module._id ? module : m,
     );

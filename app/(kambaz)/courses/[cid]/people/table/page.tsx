@@ -7,7 +7,6 @@ import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import PeopleDetails from "../../people/details";
 import * as usersClient from "../../../../users/client";
-import * as enrollmentsClient from "../../../../enrollments/client";
 export default function PeopleTable({
   users,
   fetchUsers,
@@ -22,16 +21,7 @@ export default function PeopleTable({
 
   const getEnrolledUsers = useCallback(async () => {
     try {
-      const [enrollments, allUsers] = await Promise.all([
-        enrollmentsClient.findEnrollmentsForCourse(String(cid)),
-        usersClient.findAllUsers(),
-      ]);
-      const enrolledUserIds = new Set(
-        (enrollments || []).map((enrollment: any) => enrollment.user),
-      );
-      return (allUsers || []).filter((user: any) =>
-        enrolledUserIds.has(user._id),
-      );
+      return await usersClient.findUsersForCourse(String(cid));
     } catch (err) {
       console.error("Failed to load enrolled users", err);
       return [];

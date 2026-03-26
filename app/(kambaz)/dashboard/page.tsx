@@ -112,7 +112,6 @@ export default function Dashboard() {
         dispatch(enroll(enrollment));
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Failed to toggle enrollment", error);
     }
   };
@@ -206,7 +205,6 @@ export default function Dashboard() {
                   onClick={(event) => {
                     if (!isEnrolled(course._id)) {
                       event.preventDefault();
-                      onDeleteCourse(course._id);
                     }
                   }}
                   className="wd-dashboard-course-link text-decoration-none text-dark"
