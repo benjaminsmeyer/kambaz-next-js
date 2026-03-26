@@ -7,8 +7,8 @@ const COURSES_API = `${HTTP_SERVER}/api/courses`;
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
 export const findAllUsers = async () => {
-  const { data } = await axios.get(USERS_API);
-  return data;
+  const response = await axiosWithCredentials.get(USERS_API);
+  return response.data;
 };
 
 export const findUsersForCourse = async (courseId: string) => {

@@ -29,7 +29,9 @@ export default function AssignmentEditor() {
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
   ) as any;
-  const canEditAssignments = ["FACULTY", "TA"].includes(currentUser?.role);
+  const canEditAssignments = ["FACULTY", "TA", "ADMIN"].includes(
+    currentUser?.role,
+  );
   const isReadOnly = !canEditAssignments;
   const existingAssignment =
     aid !== "new" ? assignments.find((a: any) => a._id === aid) : null;
@@ -155,7 +157,8 @@ export default function AssignmentEditor() {
     };
 
     loadAssignment();
-  }, [aid, cid, currentUser, dispatch, existingAssignment, isReadOnly, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aid, cid, currentUser]);
 
   if (!currentUser) return null;
 

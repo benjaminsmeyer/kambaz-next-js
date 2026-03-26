@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kambaz (Next.js)
 
-## Getting Started
+Kambaz is a learning management system (LMS) web application inspired by Canvas. It includes course navigation, modules, assignments, quizzes, grades, user/account flows, and enrollment views. This repository also contains a set of guided labs used to practice React, TypeScript, Bootstrap, Tailwind, and modern web development patterns.
 
-First, run the development server:
+## Purpose Of The Application
+
+This project is designed for web development learning and demonstration:
+
+- Build an LMS-style frontend experience with modern React and Next.js.
+- Practice full UI workflows such as authentication, dashboard navigation, and course management.
+- Explore incremental labs that teach core web concepts from styling/layout to state management.
+
+## Tech Stack
+
+- Next.js (App Router)
+- React + TypeScript
+- Redux Toolkit + React Redux
+- Bootstrap + React Bootstrap
+- Tailwind CSS
+- Axios
+- MongoDB
+
+## Prerequisites
+
+- Node.js 18+ (Node.js 20 LTS recommended)
+- npm (comes with Node.js)
+
+## Setup Instructions
+
+1. Clone the repository.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env.local` file in the project root.
+4. Add the backend API base URL:
+
+```env
+NEXT_PUBLIC_HTTP_SERVER=http://localhost:4000
+```
+
+This environment variable is required by multiple client modules for API requests.
+
+## Running The Application
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev`: Runs the app in development mode.
+- `npm run build`: Builds the app for production.
+- `npm start`: Starts the production server after build.
+- `npm run lint`: Runs ESLint checks.
+
+## Project Structure
+
+- `app/(kambaz)`: Main LMS application routes and shared layout.
+- `app/(kambaz)/account`: Sign in, sign up, profile, and account state.
+- `app/(kambaz)/courses`: Course list and per-course experiences.
+- `app/(kambaz)/courses/[cid]`: Course sections (home, modules, assignments, grades, quizzes, people, zoom, and more).
+- `app/(kambaz)/dashboard`: Dashboard landing page.
+- `app/(kambaz)/database`: Local JSON seed data for courses, modules, assignments, enrollments, and users.
+- `app/labs`: Educational lab exercises (Lab 1-5) for course progression.
+
+## Key Features
+
+- Account workflows: sign in, sign up, and profile updates.
+- Course-focused navigation with nested route structure.
+- Module and assignment views with Redux-managed state.
+- Enrollment and user-related data operations via API clients.
+- Labs section for focused exercises in CSS, Bootstrap, JavaScript, and React.
+
+## Troubleshooting
+
+- If API calls fail, verify `.env.local` exists and `NEXT_PUBLIC_HTTP_SERVER` points to a running backend.
+- If dependencies fail to install, confirm your Node.js version is compatible (18+).
+- If lint errors appear, run:
+
+```bash
+npm run lint
+```
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js docs: https://nextjs.org/docs
+- React docs: https://react.dev
+- Redux Toolkit docs: https://redux-toolkit.js.org
