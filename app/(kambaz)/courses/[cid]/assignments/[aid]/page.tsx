@@ -157,7 +157,8 @@ export default function AssignmentEditor() {
     };
 
     loadAssignment();
-  }, [aid, cid, currentUser, dispatch, existingAssignment, isReadOnly, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aid, cid, currentUser]);
 
   if (!currentUser) return null;
 
