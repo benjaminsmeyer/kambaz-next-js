@@ -259,7 +259,7 @@ export default function Dashboard() {
                         Edit
                       </button>
                       <button
-                        onClick={() => dispatch(deleteCourse(course._id))}
+                        onClick={() => onDeleteCourse(course._id)}
                         className="btn btn-danger"
                         id="wd-delete-course-click"
                       >
