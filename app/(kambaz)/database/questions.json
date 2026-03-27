@@ -1,0 +1,562 @@
+[
+  {
+    "_id": "QN1011",
+    "quiz": "Q101",
+    "title": "Newton's Third Law",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "What law of physics states that every action has an equal and opposite reaction, forming the basis of rocket propulsion?",
+    "blanks": ["Newton's Third Law", "newton's third law", "third law of motion"],
+    "order": 0
+  },
+  {
+    "_id": "QN1012",
+    "quiz": "Q101",
+    "title": "Specific Impulse Units",
+    "type": "True/False",
+    "points": 2,
+    "question": "Specific impulse, a measure of propellant efficiency, is expressed in units of seconds.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN1013",
+    "quiz": "Q101",
+    "title": "Cryogenic Propellant Pair",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which propellant combination is used in cryogenic rocket engines such as the Space Shuttle Main Engine?",
+    "choices": [
+      { "text": "Liquid hydrogen and liquid oxygen", "isCorrect": true },
+      { "text": "RP-1 kerosene and liquid oxygen", "isCorrect": false },
+      { "text": "Hydrazine and nitrogen tetroxide", "isCorrect": false },
+      { "text": "Solid ammonium perchlorate and aluminum", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN1021",
+    "quiz": "Q102",
+    "title": "De Laval Nozzle Purpose",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What is the primary purpose of the de Laval (convergent-divergent) nozzle in a rocket engine?",
+    "choices": [
+      { "text": "To accelerate exhaust gases from subsonic to supersonic speeds", "isCorrect": true },
+      { "text": "To cool the combustion chamber walls", "isCorrect": false },
+      { "text": "To mix fuel and oxidizer before combustion", "isCorrect": false },
+      { "text": "To reduce the exhaust plume temperature", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN1022",
+    "quiz": "Q102",
+    "title": "Combustion Instability",
+    "type": "True/False",
+    "points": 2,
+    "question": "Combustion instability — uncontrolled pressure oscillations in the combustion chamber — can lead to catastrophic engine failure.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN1023",
+    "quiz": "Q102",
+    "title": "Propellant Efficiency Metric",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The parameter measured in seconds that quantifies how efficiently a propellant produces thrust is called ______.",
+    "blanks": ["specific impulse", "Isp"],
+    "order": 2
+  },
+  {
+    "_id": "QN2011",
+    "quiz": "Q201",
+    "title": "Lift Generation Principle",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which principle describes how faster airflow over the top of an airfoil creates lower pressure and generates lift?",
+    "choices": [
+      { "text": "Bernoulli's principle", "isCorrect": true },
+      { "text": "Newton's Second Law", "isCorrect": false },
+      { "text": "Coanda effect", "isCorrect": false },
+      { "text": "Magnus effect", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN2012",
+    "quiz": "Q201",
+    "title": "Drag Direction",
+    "type": "True/False",
+    "points": 2,
+    "question": "Aerodynamic drag acts perpendicular to the direction of an object's motion through the air.",
+    "trueFalseAnswer": false,
+    "order": 1
+  },
+  {
+    "_id": "QN2013",
+    "quiz": "Q201",
+    "title": "Wing Stall",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The aerodynamic phenomenon in which a wing exceeds its critical angle of attack and experiences a sudden loss of lift is called a ______.",
+    "blanks": ["stall", "aerodynamic stall", "wing stall"],
+    "order": 2
+  },
+  {
+    "_id": "QN2021",
+    "quiz": "Q202",
+    "title": "Sonic Mach Number",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "At Mach ______, airflow transitions from subsonic to supersonic.",
+    "blanks": ["1", "1.0"],
+    "order": 0
+  },
+  {
+    "_id": "QN2022",
+    "quiz": "Q202",
+    "title": "Shock Waves",
+    "type": "True/False",
+    "points": 2,
+    "question": "Shock waves are a feature of supersonic flow and represent an abrupt change in pressure, temperature, and density.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN2023",
+    "quiz": "Q202",
+    "title": "Transonic Shock",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What phenomenon occurs when local airflow over a wing exceeds Mach 1 even though the aircraft is flying below the speed of sound?",
+    "choices": [
+      { "text": "Transonic shock formation", "isCorrect": true },
+      { "text": "Hypersonic heating", "isCorrect": false },
+      { "text": "Laminar-to-turbulent transition", "isCorrect": false },
+      { "text": "Boundary layer separation", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN3011",
+    "quiz": "Q301",
+    "title": "Carbon Fiber Advantage",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What is the primary structural advantage of carbon fiber composites in spacecraft design?",
+    "choices": [
+      { "text": "High strength-to-weight ratio", "isCorrect": true },
+      { "text": "High thermal conductivity", "isCorrect": false },
+      { "text": "Low manufacturing cost", "isCorrect": false },
+      { "text": "Excellent electrical insulation", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN3012",
+    "quiz": "Q301",
+    "title": "Titanium Thermal Conductivity",
+    "type": "True/False",
+    "points": 2,
+    "question": "Titanium is favored in spacecraft structures primarily because of its high thermal conductivity.",
+    "trueFalseAnswer": false,
+    "order": 1
+  },
+  {
+    "_id": "QN3013",
+    "quiz": "Q301",
+    "title": "Orbital Transfer Maneuver",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The two-burn orbital transfer maneuver that moves a spacecraft between two coplanar circular orbits with minimum delta-v is called a ______ transfer.",
+    "blanks": ["Hohmann", "hohmann"],
+    "order": 2
+  },
+  {
+    "_id": "QN3021",
+    "quiz": "Q302",
+    "title": "Kepler's Third Law",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "According to Kepler's Third Law, how does the orbital period relate to the semi-major axis?",
+    "choices": [
+      { "text": "The square of the period is proportional to the cube of the semi-major axis", "isCorrect": true },
+      { "text": "The period is directly proportional to the semi-major axis", "isCorrect": false },
+      { "text": "The cube of the period is proportional to the square of the semi-major axis", "isCorrect": false },
+      { "text": "The period is inversely proportional to the semi-major axis", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN3022",
+    "quiz": "Q302",
+    "title": "Earth Escape Velocity",
+    "type": "True/False",
+    "points": 2,
+    "question": "The escape velocity from Earth's surface is approximately 11.2 km/s.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN3023",
+    "quiz": "Q302",
+    "title": "Plane Change Maneuver",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "A delta-v maneuver that changes a spacecraft's orbital inclination without altering its altitude is called a ______ maneuver.",
+    "blanks": ["plane change", "inclination change", "orbital plane change"],
+    "order": 2
+  },
+  {
+    "_id": "QN4011",
+    "quiz": "Q401",
+    "title": "Carboxylic Acid Group",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which functional group consists of a carbonyl (C=O) bonded directly to a hydroxyl (−OH) group?",
+    "choices": [
+      { "text": "Carboxylic acid", "isCorrect": true },
+      { "text": "Ester", "isCorrect": false },
+      { "text": "Ketone", "isCorrect": false },
+      { "text": "Aldehyde", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN4012",
+    "quiz": "Q401",
+    "title": "Alkene Definition",
+    "type": "True/False",
+    "points": 2,
+    "question": "Alkenes are hydrocarbons that contain at least one carbon–carbon double bond.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN4013",
+    "quiz": "Q401",
+    "title": "Alkene to Alkane Reaction",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The addition of hydrogen (H₂) across a carbon–carbon double bond to convert an alkene to an alkane is called ______.",
+    "blanks": ["hydrogenation", "catalytic hydrogenation"],
+    "order": 2
+  },
+  {
+    "_id": "QN4021",
+    "quiz": "Q402",
+    "title": "Enantiomers",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "Non-superimposable mirror images of a chiral molecule are called ______.",
+    "blanks": ["enantiomers", "enantiomer"],
+    "order": 0
+  },
+  {
+    "_id": "QN4022",
+    "quiz": "Q402",
+    "title": "NMR vs IR",
+    "type": "True/False",
+    "points": 2,
+    "question": "NMR (Nuclear Magnetic Resonance) spectroscopy works by detecting the vibrations of chemical bonds.",
+    "trueFalseAnswer": false,
+    "order": 1
+  },
+  {
+    "_id": "QN4023",
+    "quiz": "Q402",
+    "title": "Functional Group Identification",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which spectroscopic technique is best suited for rapidly identifying the functional groups present in an organic compound?",
+    "choices": [
+      { "text": "Infrared (IR) spectroscopy", "isCorrect": true },
+      { "text": "Mass spectrometry", "isCorrect": false },
+      { "text": "UV-Vis spectroscopy", "isCorrect": false },
+      { "text": "X-ray crystallography", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN5011",
+    "quiz": "Q501",
+    "title": "Ligand Definition",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "In coordination chemistry, an ion or molecule that donates a lone pair of electrons to a central metal atom is called a ______.",
+    "blanks": ["ligand", "Lewis base"],
+    "order": 0
+  },
+  {
+    "_id": "QN5012",
+    "quiz": "Q501",
+    "title": "Chelating Ligands",
+    "type": "True/False",
+    "points": 2,
+    "question": "A chelating ligand can form more than one coordinate bond to the same metal ion simultaneously.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN5013",
+    "quiz": "Q501",
+    "title": "Octahedral Geometry",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What is the typical geometry of a complex with coordination number 6?",
+    "choices": [
+      { "text": "Octahedral", "isCorrect": true },
+      { "text": "Tetrahedral", "isCorrect": false },
+      { "text": "Square planar", "isCorrect": false },
+      { "text": "Trigonal bipyramidal", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN5021",
+    "quiz": "Q502",
+    "title": "d-Orbital Splitting Levels",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "How many distinct energy levels do d-orbitals split into within an octahedral crystal field?",
+    "choices": [
+      { "text": "2 levels (t₂g and eɡ)", "isCorrect": true },
+      { "text": "3 levels (t₂g, eɡ, and a₁g)", "isCorrect": false },
+      { "text": "5 levels (one per d-orbital)", "isCorrect": false },
+      { "text": "4 levels", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN5022",
+    "quiz": "Q502",
+    "title": "Strong-field Ligands",
+    "type": "True/False",
+    "points": 2,
+    "question": "Strong-field ligands produce a larger crystal field splitting energy (Δ) compared to weak-field ligands.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN5023",
+    "quiz": "Q502",
+    "title": "Low-spin Complex",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "A coordination complex in which all electrons are forced into the lower-energy d-orbital set, resulting in maximum electron pairing, is called a ______ complex.",
+    "blanks": ["low-spin", "low spin"],
+    "order": 2
+  },
+  {
+    "_id": "QN6011",
+    "quiz": "Q601",
+    "title": "Gibbs Free Energy Sign",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What does a negative value of Gibbs free energy change (ΔG < 0) indicate about a chemical reaction at constant temperature and pressure?",
+    "choices": [
+      { "text": "The reaction is spontaneous", "isCorrect": true },
+      { "text": "The reaction is non-spontaneous", "isCorrect": false },
+      { "text": "The reaction is at equilibrium", "isCorrect": false },
+      { "text": "The reaction requires an input of entropy", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN6012",
+    "quiz": "Q601",
+    "title": "Entropy in Spontaneous Processes",
+    "type": "True/False",
+    "points": 2,
+    "question": "The entropy of the universe always decreases in a spontaneous process.",
+    "trueFalseAnswer": false,
+    "order": 1
+  },
+  {
+    "_id": "QN6013",
+    "quiz": "Q601",
+    "title": "Spontaneity Potential",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The thermodynamic potential that determines whether a process is spontaneous at constant temperature and pressure is called ______ free energy.",
+    "blanks": ["Gibbs", "gibbs"],
+    "order": 2
+  },
+  {
+    "_id": "QN6021",
+    "quiz": "Q602",
+    "title": "Arrhenius Equation",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The equation that relates the rate constant of a reaction to temperature and activation energy is called the ______ equation.",
+    "blanks": ["Arrhenius", "arrhenius"],
+    "order": 0
+  },
+  {
+    "_id": "QN6022",
+    "quiz": "Q602",
+    "title": "Temperature and Rate",
+    "type": "True/False",
+    "points": 2,
+    "question": "For most chemical reactions, increasing temperature increases the reaction rate by providing more molecules with energy above the activation energy threshold.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN6023",
+    "quiz": "Q602",
+    "title": "Wave Mechanical Model",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which quantum mechanical model describes electrons as existing in probability distributions (orbitals) rather than fixed orbits?",
+    "choices": [
+      { "text": "Wave mechanical (quantum mechanical) model", "isCorrect": true },
+      { "text": "Bohr model", "isCorrect": false },
+      { "text": "Rutherford model", "isCorrect": false },
+      { "text": "Thomson plum-pudding model", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN7011",
+    "quiz": "Q701",
+    "title": "High Elvish Tongue",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Which Elvish language was considered the 'High' tongue, used in formal, ceremonial, and scholarly contexts?",
+    "choices": [
+      { "text": "Quenya", "isCorrect": true },
+      { "text": "Sindarin", "isCorrect": false },
+      { "text": "Telerin", "isCorrect": false },
+      { "text": "Nandorin", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN7012",
+    "quiz": "Q701",
+    "title": "Everyday Elvish",
+    "type": "True/False",
+    "points": 2,
+    "question": "Sindarin was the primary everyday language of the Noldor Elves during the First Age.",
+    "trueFalseAnswer": false,
+    "order": 1
+  },
+  {
+    "_id": "QN7013",
+    "quiz": "Q701",
+    "title": "Elvish Writing Script",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The flowing script most commonly used to write both Sindarin and Quenya was created by Fëanor and is called ______.",
+    "blanks": ["Tengwar", "tengwar"],
+    "order": 2
+  },
+  {
+    "_id": "QN7021",
+    "quiz": "Q702",
+    "title": "Secret Language of the Dwarves",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The secret language of the Dwarves, never taught to outsiders and used only among their own people, is called ______.",
+    "blanks": ["Khuzdul", "khuzdul"],
+    "order": 0
+  },
+  {
+    "_id": "QN7022",
+    "quiz": "Q702",
+    "title": "Black Speech Origin",
+    "type": "True/False",
+    "points": 2,
+    "question": "The Black Speech of Mordor was devised by Sauron to be the universal language of all his servants.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN7023",
+    "quiz": "Q702",
+    "title": "One Ring Inscription",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "The inscription on the One Ring, written in the Black Speech using Tengwar script, can be translated as:",
+    "choices": [
+      { "text": "One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them", "isCorrect": true },
+      { "text": "In the land of Mordor where the shadows lie, the Dark Lord sits on his throne", "isCorrect": false },
+      { "text": "Ash nazg durbatulûk — the ring of power above all others", "isCorrect": false },
+      { "text": "Three rings for the Elven-kings under the sky", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN8011",
+    "quiz": "Q801",
+    "title": "Council of Elrond",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The great council convened in Rivendell to decide what must be done with the One Ring was called the ______ of Elrond.",
+    "blanks": ["Council", "council"],
+    "order": 0
+  },
+  {
+    "_id": "QN8012",
+    "quiz": "Q801",
+    "title": "Last Alliance",
+    "type": "True/False",
+    "points": 2,
+    "question": "The Last Alliance of Elves and Men was formed during the Second Age to oppose Sauron and ultimately led to his first defeat.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN8013",
+    "quiz": "Q801",
+    "title": "White Council Leader",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "Who served as the nominal head of the White Council, the assembly of the Wise in Middle-earth?",
+    "choices": [
+      { "text": "Saruman (Curunír)", "isCorrect": true },
+      { "text": "Gandalf (Mithrandir)", "isCorrect": false },
+      { "text": "Elrond", "isCorrect": false },
+      { "text": "Galadriel", "isCorrect": false }
+    ],
+    "order": 2
+  },
+  {
+    "_id": "QN8021",
+    "quiz": "Q802",
+    "title": "Battle of Five Armies",
+    "type": "Multiple Choice",
+    "points": 3,
+    "question": "What event triggered the Battle of Five Armies near the Lonely Mountain?",
+    "choices": [
+      { "text": "Thorin's refusal to share Smaug's recovered treasure with the Men of Lake-town and the Elves", "isCorrect": true },
+      { "text": "Sauron's forces attacking Erebor", "isCorrect": false },
+      { "text": "The Necromancer's army marching from Dol Guldur", "isCorrect": false },
+      { "text": "A dispute between Dwarves and Elves over the Arkenstone", "isCorrect": false }
+    ],
+    "order": 0
+  },
+  {
+    "_id": "QN8022",
+    "quiz": "Q802",
+    "title": "Aragorn's Unification",
+    "type": "True/False",
+    "points": 2,
+    "question": "Aragorn's coronation as King of Gondor and Arnor contributed to uniting the kingdoms of Men and forging lasting peace after the War of the Ring.",
+    "trueFalseAnswer": true,
+    "order": 1
+  },
+  {
+    "_id": "QN8023",
+    "quiz": "Q802",
+    "title": "Oath of Eorl",
+    "type": "Fill in the Blank",
+    "points": 3,
+    "question": "The agreement between Eorl the Young and Gondor that bound the Rohirrim to ride to Gondor's aid in times of need is called the ______.",
+    "blanks": ["Oath of Eorl", "oath of eorl"],
+    "order": 2
+  }
+]
