@@ -72,7 +72,7 @@ export default function Signin() {
       </Link>
       <div className="mt-4 pt-3 border-top small" id="wd-landing-info">
         <h2 className="h6 mb-2">Team Information</h2>
-        <p className="mb-2">Section: Web Development Online Spring 2026</p>
+        <p className="mb-1">Section: Web Development Online Spring 2026</p>
         <p className="mb-1">
           Quizzes Project Team: Benjamin Meyer, Aaryan Jain, Laith Taher, Althea
           Masetti Zannini
