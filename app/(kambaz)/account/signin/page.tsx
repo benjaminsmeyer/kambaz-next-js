@@ -70,6 +70,34 @@ export default function Signin() {
       <Link id="wd-signup-link" href="/account/signup">
         Sign up
       </Link>
+      <div className="mt-4 pt-3 border-top small" id="wd-landing-info">
+        <h2 className="h6 mb-2">Team Information</h2>
+        <p className="mb-1">Section: Web Development Online Spring 2026</p>
+        <p className="mb-1">
+          Quizzes Project Team: Benjamin Meyer, Aaryan Jain, Laith Taher, Althea
+          Masetti Zannini
+        </p>
+        <p className="mb-1">
+          Front-end project repository:{" "}
+          <a
+            href="https://github.com/benjaminsmeyer/kambaz-next-js"
+            target="_blank"
+            rel="noreferrer"
+          >
+            github.com/benjaminsmeyer/kambaz-next-js
+          </a>
+        </p>
+        <p className="mb-0">
+          Server project repository:{" "}
+          <a
+            href="https://github.com/benjaminsmeyer/kambaz-node-server-app"
+            target="_blank"
+            rel="noreferrer"
+          >
+            github.com/benjaminsmeyer/kambaz-node-server-app
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

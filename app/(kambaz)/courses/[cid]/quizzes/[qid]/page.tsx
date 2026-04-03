@@ -29,12 +29,9 @@ export default function QuizDetails() {
 
   useEffect(() => {
     const load = async () => {
-      console.log("FINDING QUIZ 1");
       if (!qid) return;
       try {
-        console.log("FINDING QUIZ", qid);
         const q = await findQuizById(qid as string);
-        console.log("q", q);
         setQuiz(q);
         if (isStudent) {
           try {
@@ -95,7 +92,7 @@ export default function QuizDetails() {
           <div
             className="mb-4"
             dangerouslySetInnerHTML={{ __html: quiz.description || "" }}
-          />{" "}
+          />
           <table className="table table-bordered w-75">
             <tbody>
               <tr>
