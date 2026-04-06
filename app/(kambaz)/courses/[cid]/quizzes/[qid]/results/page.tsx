@@ -78,6 +78,7 @@ export default function QuizResults() {
     quiz.showCorrectAnswers === "Immediately" ||
     quiz.showCorrectAnswers === "After Due Date";
   
+  // helper to format dates nicely, or show "—" if no date provided
   const formatDate = (date?: string) => (date ? new Date(date).toLocaleString() : "—");
 
   return (
