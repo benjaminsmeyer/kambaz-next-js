@@ -93,13 +93,13 @@ export default function QuizResults() {
       : "—";
 
   // duration in minutes between startedAt and submittedAt
-  const durationMin = attempt.startedAt
-    ? Math.round(
-        (new Date(attempt.submittedAt).getTime() -
-          new Date(attempt.startedAt).getTime()) /
-          60000,
-      )
-    : null;
+  // const durationMin = attempt.startedAt
+  //   ? Math.round(
+  //       (new Date(attempt.submittedAt).getTime() -
+  //         new Date(attempt.startedAt).getTime()) /
+  //         60000,
+  //     )
+  //   : null;
 
   return (
     <div id="wd-quiz-results" className="p-4" style={{ maxWidth: 800 }}>
@@ -126,13 +126,13 @@ export default function QuizResults() {
           {allAttempts.map((a, i) => {
             const isLatest = a._id === allAttempts[allAttempts.length - 1]._id;
             const isViewing = a._id === attempt._id;
-            const mins = a.startedAt
-              ? Math.round(
-                  (new Date(a.submittedAt).getTime() -
-                    new Date(a.startedAt).getTime()) /
-                    60000,
-                )
-              : null;
+            // const mins = a.startedAt
+            //   ? Math.round(
+            //       (new Date(a.submittedAt).getTime() -
+            //         new Date(a.startedAt).getTime()) /
+            //         60000,
+            //     )
+            //   : null;
             return (
               <tr
                 key={a._id}
@@ -156,7 +156,8 @@ export default function QuizResults() {
                   Attempt {a.attemptNumber ?? i + 1}
                 </td>
                 <td className="py-2">
-                  {mins != null ? `${mins} minute${mins !== 1 ? "s" : ""}` : "—"}
+                  {"—"}
+                  {/* {mins != null ? `${mins} minute${mins !== 1 ? "s" : ""}` : "—"} */}
                 </td>
                 <td className="py-2">
                   {a.score} out of {a.totalPoints}
@@ -175,9 +176,9 @@ export default function QuizResults() {
           Score for this quiz: <strong>{attempt.score} out of {attempt.totalPoints}</strong>
         </div>
         <div>Submitted {formatDate(attempt.submittedAt)}</div>
-        {durationMin != null && (
+        {/* {durationMin != null && (
           <div>This attempt took {durationMin} minute{durationMin !== 1 ? "s" : ""}.</div>
-        )}
+        )} */}
       </div>
 
       {/* questions */}
