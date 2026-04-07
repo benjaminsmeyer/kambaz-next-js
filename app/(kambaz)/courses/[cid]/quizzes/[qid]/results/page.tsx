@@ -112,63 +112,67 @@ export default function QuizResults() {
       )}
 
       {/* attempt history table */}
-      <h3 className="mb-3">Attempt History</h3>
-      <table className="w-100 mb-2" style={{ borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ borderBottom: "2px solid #dee2e6" }}>
-            <th style={{ width: 70 }} />
-            <th className="pb-1 text-start">Attempt</th>
-            <th className="pb-1 text-start">Time</th>
-            <th className="pb-1 text-start">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allAttempts.map((a, i) => {
-            const isLatest = a._id === allAttempts[allAttempts.length - 1]._id;
-            const isViewing = a._id === attempt._id;
-            // const mins = a.startedAt
-            //   ? Math.round(
-            //       (new Date(a.submittedAt).getTime() -
-            //         new Date(a.startedAt).getTime()) /
-            //         60000,
-            //     )
-            //   : null;
-            return (
-              <tr
-                key={a._id}
-                style={{ borderBottom: "1px solid #dee2e6", cursor: "pointer" }}
-                onClick={() =>
-                  router.push(
-                    `/courses/${cid}/quizzes/${qid}/results?attemptId=${a._id}`,
-                  )
-                }
-              >
-                <td
-                  className="py-2 text-muted"
-                  style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: 1 }}
+      {!attemptId && (
+        <>
+        <h3 className="mb-3">Attempt History</h3>
+        <table className="w-100 mb-2" style={{ borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ borderBottom: "2px solid #dee2e6" }}>
+              <th style={{ width: 70 }} />
+              <th className="pb-1 text-start">Attempt</th>
+              <th className="pb-1 text-start">Time</th>
+              <th className="pb-1 text-start">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allAttempts.map((a, i) => {
+              const isLatest = a._id === allAttempts[allAttempts.length - 1]._id;
+              const isViewing = a._id === attempt._id;
+              // const mins = a.startedAt
+              //   ? Math.round(
+              //       (new Date(a.submittedAt).getTime() -
+              //         new Date(a.startedAt).getTime()) /
+              //         60000,
+              //     )
+              //   : null;
+              return (
+                <tr
+                  key={a._id}
+                  style={{ borderBottom: "1px solid #dee2e6", cursor: "pointer" }}
+                  onClick={() =>
+                    router.push(
+                      `/courses/${cid}/quizzes/${qid}/results?attemptId=${a._id}`,
+                    )
+                  }
                 >
-                  {isLatest ? "LATEST" : ""}
-                </td>
-                <td
-                  className="py-2"
-                  style={{ color: isViewing ? "#c0392b" : "inherit" }}
-                >
-                  Attempt {a.attemptNumber ?? i + 1}
-                </td>
-                <td className="py-2">
-                  {"—"}
-                  {/* {mins != null ? `${mins} minute${mins !== 1 ? "s" : ""}` : "—"} */}
-                </td>
-                <td className="py-2">
-                  {a.score} out of {a.totalPoints}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <td
+                    className="py-2 text-muted"
+                    style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: 1 }}
+                  >
+                    {isLatest ? "LATEST" : ""}
+                  </td>
+                  <td
+                    className="py-2"
+                    style={{ color: isViewing ? "#c0392b" : "inherit" }}
+                  >
+                    Attempt {a.attemptNumber ?? i + 1}
+                  </td>
+                  <td className="py-2">
+                    {"—"}
+                    {/* {mins != null ? `${mins} minute${mins !== 1 ? "s" : ""}` : "—"} */}
+                  </td>
+                  <td className="py-2">
+                    {a.score} out of {a.totalPoints}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-      <hr />
+        <hr />
+        </>
+      )}
 
       {/* score summary */}
       <div className="mb-4" style={{ fontSize: "0.95rem" }}>
@@ -220,7 +224,7 @@ export default function QuizResults() {
                     label={
                       <span className={showCorrect && choice.isCorrect ? "text-success fw-bold" : ""}>
                         {choice.text}
-                        {showCorrect && choice.isCorrect && " ✓"}
+                        {choice.isCorrect && " ✓"}
                       </span>
                     }
                     checked={answer?.selectedChoice === choice.text}
@@ -238,7 +242,7 @@ export default function QuizResults() {
                     label={
                       <span className={showCorrect && question.trueFalseAnswer === val ? "text-success fw-bold" : ""}>
                         {val ? "True" : "False"}
-                        {showCorrect && question.trueFalseAnswer === val && " ✓"}
+                        {question.trueFalseAnswer === val && " ✓"}
                       </span>
                     }
                     checked={answer?.trueFalseAnswer === val}
@@ -255,7 +259,7 @@ export default function QuizResults() {
                     disabled
                     className={isCorrect ? "border-success" : "border-danger"}
                   />
-                  {showCorrect && !isCorrect && question.blanks && (
+                  {!isCorrect && question.blanks && (
                     <div className="text-success small mt-1">
                       Correct answer(s): {question.blanks.join(", ")}
                     </div>
