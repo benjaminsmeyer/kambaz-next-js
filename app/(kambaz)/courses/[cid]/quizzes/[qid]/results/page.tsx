@@ -74,9 +74,11 @@ export default function QuizResults() {
   const answerMap = new Map(
     (attempt.answers ?? []).map((answer) => [String(answer.question), answer]),
   );
+
   const showCorrect =
     quiz.showCorrectAnswers === "Immediately" ||
-    quiz.showCorrectAnswers === "After Due Date";
+    quiz.showCorrectAnswers === "After Due Date" && isPastDue ||
+    quiz.showCorrectAnswers === "After Last Attempt" && attemptsRemaining === 0;
   
   // helper to format dates nicely, or show "—" if no date provided
   const formatDate = (date?: string) => (date ? new Date(date).toLocaleString() : "—");

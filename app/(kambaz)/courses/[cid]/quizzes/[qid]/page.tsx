@@ -44,6 +44,7 @@ export default function QuizDetails() {
             const latest = await getLatestAttempt(qid as string);
             setLatestAttempt(latest);
           } catch {
+            // no latest attempt found - sends a 404 which is expected if the student hasn't taken the quiz yet
             setLatestAttempt(null);
           }
         }
@@ -56,10 +57,14 @@ export default function QuizDetails() {
 
   if (!quiz) return <div className="p-4">Loading...</div>;
 
-  const attemptsUsed = attempts.length;
   const attemptsAllowed = quiz.multipleAttempts ? quiz.howManyAttempts : 1;
-  const attemptsRemaining = attemptsAllowed - attemptsUsed;
-  const canStart = attemptsRemaining > 0;
+  const attemptsRemaining = attemptsAllowed - attempts.length;
+  const isQuizClosed = (
+    (quiz.availableDate && new Date() < new Date(quiz.availableDate)) 
+    ||(quiz.dueDate && new Date() > new Date(quiz.dueDate)) 
+    || (quiz.untilDate && new Date() > new Date(quiz.untilDate))
+  );
+  const canStart = attemptsRemaining > 0 && !isQuizClosed;
 
   const formatDate = (d?: string) => (d ? new Date(d).toLocaleString() : "—");
 
@@ -182,7 +187,7 @@ export default function QuizDetails() {
               <strong>Attempts Allowed:</strong> {attemptsAllowed}
             </li>
             <li>
-              <strong>Attempts Used:</strong> {attemptsUsed}
+              <strong>Attempts Used:</strong> {attempts.length}
             </li>
           </ul>
 
@@ -198,11 +203,12 @@ export default function QuizDetails() {
               variant="danger"
               onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/take`)}
             >
-              {attemptsUsed > 0 ? "Retake Quiz" : "Start Quiz"}
+              {attempts.length > 0 ? "Retake Quiz" : "Start Quiz"}
             </Button>
           ) : (
             <div className="alert alert-warning">
-              You have used all {attemptsAllowed} attempt(s) for this quiz.
+              {isQuizClosed && "This quiz is not available."}
+              {attemptsAllowed > 1 && !isQuizClosed && `You have used all ${attemptsAllowed} attempt(s) for this quiz.`}
             </div>
           )}
         </div>
