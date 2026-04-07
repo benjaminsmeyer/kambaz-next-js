@@ -220,7 +220,6 @@ export default function QuizEditor() {
                   id="wd-name"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label className="fw-bold">Description</Form.Label>
                 <Form.Control
@@ -233,7 +232,6 @@ export default function QuizEditor() {
                   id="wd-description"
                 />
               </Form.Group>
-
               <div className="row">
                 <div className="col-md-6">
                   <Form.Group className="mb-3">
@@ -275,7 +273,6 @@ export default function QuizEditor() {
                   </Form.Group>
                 </div>
               </div>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -287,7 +284,6 @@ export default function QuizEditor() {
                   id="wd-shuffle-answers"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -314,7 +310,6 @@ export default function QuizEditor() {
                   </div>
                 )}
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -344,7 +339,6 @@ export default function QuizEditor() {
                   </div>
                 )}
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label className="fw-bold">
                   Show Correct Answers
@@ -357,8 +351,7 @@ export default function QuizEditor() {
                   placeholder="e.g. Immediately, After Due Date"
                   id="wd-show-correct-answers"
                 />
-              </Form.Group>
-
+              </Form.Group>{" "}
               <Form.Group className="mb-3">
                 <Form.Label className="fw-bold">Access Code</Form.Label>
                 <Form.Control
@@ -369,7 +362,6 @@ export default function QuizEditor() {
                   id="wd-access-code"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -381,7 +373,6 @@ export default function QuizEditor() {
                   id="wd-one-question-at-a-time"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -393,7 +384,6 @@ export default function QuizEditor() {
                   id="wd-webcam-required"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Check
                   type="checkbox"
@@ -408,7 +398,6 @@ export default function QuizEditor() {
                   id="wd-lock-questions-after-answering"
                 />
               </Form.Group>
-
               <div className="row">
                 <div className="col-md-4">
                   <Form.Group className="mb-3">
@@ -454,7 +443,6 @@ export default function QuizEditor() {
                   </Form.Group>
                 </div>
               </div>
-
               <hr />
               <div className="d-flex gap-2 justify-content-end">
                 <Button

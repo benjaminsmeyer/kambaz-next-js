@@ -119,6 +119,14 @@ export default function Dashboard() {
   const onAddNewCourse = async () => {
     const newCourse = await client.createCourse(course);
     dispatch(setCourses([...courses, newCourse]));
+
+    if (!currentUser?._id) return;
+    try {
+      const enrollment = await enrollmentsClient.enrollInCourse(newCourse._id);
+      dispatch(enroll(enrollment));
+    } catch {
+      // Keep course creation successful even if auto-enrollment fails.
+    }
   };
 
   const onDeleteCourse = async (courseId: string) => {
