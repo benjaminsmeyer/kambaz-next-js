@@ -23,11 +23,13 @@ export default function TakeQuiz() {
 
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [shuffledChoices, setShuffledChoices] = useState<Record<string, any[]>>(
+    {},
+  );
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [submitting, setSubmitting] = useState(false);
   const [blocked, setBlocked] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState(new Date());
-
 
   useEffect(() => {
     if (!qid) return;
@@ -51,12 +53,17 @@ export default function TakeQuiz() {
           setBlocked("This quiz is not yet available.");
           return;
         }
-        if (quiz.untilDate && startedAt > new Date(quiz.untilDate) || quiz.dueDate && startedAt > new Date(quiz.dueDate)) {
+        if (
+          (quiz.untilDate && startedAt > new Date(quiz.untilDate)) ||
+          (quiz.dueDate && startedAt > new Date(quiz.dueDate))
+        ) {
           setBlocked("This quiz is no longer available.");
           return;
         }
         // check attempts remaining
-        const attemptsAllowed = quiz.multipleAttempts ? (quiz.howManyAttempts ?? 1) : 1;
+        const attemptsAllowed = quiz.multipleAttempts
+          ? (quiz.howManyAttempts ?? 1)
+          : 1;
         if (attempts.length >= attemptsAllowed) {
           setBlocked("You have used all of your attempts for this quiz.");
           return;
@@ -64,6 +71,20 @@ export default function TakeQuiz() {
 
         setQuiz(quiz);
         setQuestions(questions);
+        if (quiz.shuffleAnswers) {
+          const shuffled: Record<string, any[]> = {};
+          questions.forEach((q) => {
+            if (q.choices) {
+              const copy = [...q.choices];
+              for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+              }
+              shuffled[q._id] = copy;
+            }
+          });
+          setShuffledChoices(shuffled);
+        }
       } catch (err) {
         console.error("Failed to load quiz", err);
       }
@@ -87,41 +108,61 @@ export default function TakeQuiz() {
           blankAnswer: a.blankAnswer,
         };
       });
-      console.log("submitting attempt with payload", payload, "and startedAt", startedAt.toISOString());
-      const attempt = await submitAttempt(qid as string, payload, startedAt.toISOString());
-      router.push(`/courses/${cid}/quizzes/${qid}/results?attemptId=${attempt._id}`);
+      console.log(
+        "submitting attempt with payload",
+        payload,
+        "and startedAt",
+        startedAt.toISOString(),
+      );
+      const attempt = await submitAttempt(
+        qid as string,
+        payload,
+        startedAt.toISOString(),
+        quiz.accessCode ?? null,
+      );
+      router.push(
+        `/courses/${cid}/quizzes/${qid}/results?attemptId=${attempt._id}`,
+      );
     } catch (err) {
       console.error("Failed to submit quiz", err);
       setSubmitting(false);
     }
   };
 
-  if (blocked) return (
-    <div className="p-4">
-      <div className="alert alert-warning">{blocked}</div>
-      <Button variant="secondary" onClick={() => router.push(`/courses/${cid}/quizzes`)}>
-        Back to Quizzes
-      </Button>
-    </div>
-  );
+  if (blocked)
+    return (
+      <div className="p-4">
+        <div className="alert alert-warning">{blocked}</div>
+        <Button
+          variant="secondary"
+          onClick={() => router.push(`/courses/${cid}/quizzes`)}
+        >
+          Back to Quizzes
+        </Button>
+      </div>
+    );
 
   if (!quiz) return <div className="p-4">Loading...</div>;
 
   return (
     <div id="wd-quiz-take" className="p-4">
       <h2 className="mb-1">{quiz.title}</h2>
-      {quiz.description && <p className="text-muted mb-3">{quiz.description}</p>}
+      {quiz.description && (
+        <p className="text-muted mb-3">{quiz.description}</p>
+      )}
 
       {questions.map((q, idx) => (
         <div key={q._id} className="border rounded p-3 mb-3">
           <div className="d-flex justify-content-between mb-2">
-            <strong>Question {idx + 1}: {q.title}</strong>
+            <strong>
+              Question {idx + 1}: {q.title}
+            </strong>
             <span>{q.points} pts</span>
           </div>
           <p>{q.question}</p>
 
           {q.type === "Multiple Choice" &&
-            q.choices?.map((c: any, i: number) => (
+            (shuffledChoices[q._id] ?? q.choices)?.map((c: any, i: number) => (
               <Form.Check
                 key={i}
                 type="radio"
@@ -147,7 +188,9 @@ export default function TakeQuiz() {
           {q.type === "Fill in the Blank" && (
             <Form.Control
               value={answers[q._id]?.blankAnswer ?? ""}
-              onChange={(e) => setAnswer(q._id, { blankAnswer: e.target.value })}
+              onChange={(e) =>
+                setAnswer(q._id, { blankAnswer: e.target.value })
+              }
               placeholder="Your answer"
             />
           )}
@@ -155,7 +198,10 @@ export default function TakeQuiz() {
       ))}
 
       <div className="d-flex gap-2 mt-4">
-        <Button variant="secondary" onClick={() => router.push(`/courses/${cid}/quizzes`)}>
+        <Button
+          variant="secondary"
+          onClick={() => router.push(`/courses/${cid}/quizzes`)}
+        >
           Cancel
         </Button>
         <Button variant="danger" onClick={handleSubmit} disabled={submitting}>

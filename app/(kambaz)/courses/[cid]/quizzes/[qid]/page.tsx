@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 import { RootState } from "@/app/(kambaz)/store";
 import {
   findQuizById,
@@ -27,6 +27,9 @@ export default function QuizDetails() {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [latestAttempt, setLatestAttempt] = useState<QuizAttempt | null>(null);
+  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [accessCodeInput, setAccessCodeInput] = useState("");
+  const [accessCodeError, setAccessCodeError] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -69,6 +72,25 @@ export default function QuizDetails() {
   const showResults = quiz.showCorrectAnswers === "Immediately" || (quiz.showCorrectAnswers === "After Due Date" && new Date() > new Date(quiz.dueDate || "")) || (quiz.showCorrectAnswers === "After Last Attempt" && attemptsRemaining === 0);
 
   const formatDate = (d?: string) => (d ? new Date(d).toLocaleString() : "—");
+
+  const handleStartQuiz = () => {
+    if (quiz?.accessCode) {
+      setShowAccessModal(true);
+    } else {
+      router.push(`/courses/${cid}/quizzes/${qid}/take`);
+    }
+  };
+
+  const handleAccessCodeSubmit = () => {
+    if (accessCodeInput === quiz?.accessCode) {
+      setShowAccessModal(false);
+      setAccessCodeInput("");
+      setAccessCodeError(false);
+      router.push(`/courses/${cid}/quizzes/${qid}/take`);
+    } else {
+      setAccessCodeError(true);
+    }
+  };
 
   return (
     <div id="wd-quiz-details" className="p-4">
@@ -201,10 +223,7 @@ export default function QuizDetails() {
           )}
 
           {canStart ? (
-            <Button
-              variant="danger"
-              onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/take`)}
-            >
+            <Button variant="danger" onClick={handleStartQuiz}>
               {attempts.length > 0 ? "Retake Quiz" : "Start Quiz"}
             </Button>
           ) : (
@@ -213,7 +232,6 @@ export default function QuizDetails() {
               {attemptsAllowed > 1 && !isQuizClosed && `You have used all ${attemptsAllowed} attempt(s) for this quiz.`}
             </div>
           )}
-
           {showResults && latestAttempt ? (
             <QuizResults />
           ) : (
@@ -226,6 +244,35 @@ export default function QuizDetails() {
           )}
         </div>
       )}
+      <Modal show={showAccessModal} onHide={() => { setShowAccessModal(false); setAccessCodeInput(""); setAccessCodeError(false); }}>
+        <Modal.Header closeButton>
+          <Modal.Title>Access Code Required</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Enter the access code to start this quiz:</Form.Label>
+            <Form.Control
+              type="text"
+              value={accessCodeInput}
+              onChange={(e) => { setAccessCodeInput(e.target.value); setAccessCodeError(false); }}
+              isInvalid={accessCodeError}
+              onKeyDown={(e) => e.key === "Enter" && handleAccessCodeSubmit()}
+              autoFocus
+            />
+            <Form.Control.Feedback type="invalid">
+              Incorrect access code. Please try again.
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => { setShowAccessModal(false); setAccessCodeInput(""); setAccessCodeError(false); }}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleAccessCodeSubmit}>
+            Start Quiz
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
