@@ -12,6 +12,7 @@ import {
   Quiz,
   QuizAttempt,
 } from "../client";
+import QuizResults from "./results/page";
 
 export default function QuizDetails() {
   const { cid, qid } = useParams();
@@ -65,6 +66,7 @@ export default function QuizDetails() {
     || (quiz.untilDate && new Date() > new Date(quiz.untilDate))
   );
   const canStart = attemptsRemaining > 0 && !isQuizClosed;
+  const showResults = quiz.showCorrectAnswers === "Immediately" || (quiz.showCorrectAnswers === "After Due Date" && new Date() > new Date(quiz.dueDate || "")) || (quiz.showCorrectAnswers === "After Last Attempt" && attemptsRemaining === 0);
 
   const formatDate = (d?: string) => (d ? new Date(d).toLocaleString() : "—");
 
@@ -209,6 +211,17 @@ export default function QuizDetails() {
             <div className="alert alert-warning">
               {isQuizClosed && "This quiz is not available."}
               {attemptsAllowed > 1 && !isQuizClosed && `You have used all ${attemptsAllowed} attempt(s) for this quiz.`}
+            </div>
+          )}
+
+          {showResults && latestAttempt ? (
+            <QuizResults />
+          ) : (
+            <div className="alert alert-secondary mt-4">
+              {quiz.showCorrectAnswers === "Immediately" && "Correct answers are shown immediately after submission."}
+              {quiz.showCorrectAnswers === "After Due Date" && "Correct answers will be shown after the due date."}
+              {quiz.showCorrectAnswers === "After Last Attempt" && "Correct answers will be shown after you have used all your attempts."}
+              {!quiz.showCorrectAnswers && "Correct answers will not be shown for this quiz."}
             </div>
           )}
         </div>

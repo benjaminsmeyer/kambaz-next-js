@@ -76,6 +76,7 @@ export interface QuizAttempt {
   score: number;
   totalPoints: number;
   answers: AttemptAnswer[];
+  startedAt: string;
   submittedAt: string;
 }
 
@@ -161,11 +162,13 @@ export const deleteQuestion = async (questionId: string): Promise<any> => {
 export const submitAttempt = async (
   quizId: string,
   answers: Partial<AttemptAnswer>[],
+  startedAt: string,
   accessCode?: string,
 ): Promise<QuizAttempt> => {
+  console.log("submitting attempt with startedAt", startedAt);
   const { data } = await axiosWithCredentials.post(
     `${QUIZZES_API}/${quizId}/attempts`,
-    { answers, accessCode },
+    { answers, accessCode, startedAt },
   );
   return data;
 };

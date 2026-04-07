@@ -69,7 +69,7 @@ export default function QuizResults() {
   // only students see the retake button
   const isStudent = currentUser?.role === "STUDENT";
   const isPastDue = quiz.dueDate ? new Date() > new Date(quiz.dueDate) : false;
-  
+
   // map question IDs to the student's answer for quick lookup during render
   const answerMap = new Map(
     (attempt.answers ?? []).map((answer) => [String(answer.question), answer]),
@@ -77,119 +77,215 @@ export default function QuizResults() {
 
   const showCorrect =
     quiz.showCorrectAnswers === "Immediately" ||
-    quiz.showCorrectAnswers === "After Due Date" && isPastDue ||
-    quiz.showCorrectAnswers === "After Last Attempt" && attemptsRemaining === 0;
-  
-  // helper to format dates nicely, or show "—" if no date provided
-  const formatDate = (date?: string) => (date ? new Date(date).toLocaleString() : "—");
+    (quiz.showCorrectAnswers === "After Due Date" && isPastDue) ||
+    (quiz.showCorrectAnswers === "After Last Attempt" && attemptsRemaining === 0);
+
+  // helper to format dates in Canvas style: "Mar 31 at 1:27pm"
+  const formatDate = (date?: string) =>
+    date
+      ? new Date(date).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })
+      : "—";
+
+  // duration in minutes between startedAt and submittedAt
+  const durationMin = attempt.startedAt
+    ? Math.round(
+        (new Date(attempt.submittedAt).getTime() -
+          new Date(attempt.startedAt).getTime()) /
+          60000,
+      )
+    : null;
 
   return (
-    <div id="wd-quiz-results" className="p-4">
-      <h2 className="mb-1">{quiz.title}</h2>
-      <div className="mb-3 text-muted">
-        Attempt {attempt.attemptNumber} submitted {formatDate(attempt.submittedAt)}
+    <div id="wd-quiz-results" className="p-4" style={{ maxWidth: 800 }}>
+
+      {/* locked notice */}
+      {isPastDue && quiz.dueDate && (
+        <p className="text-muted mb-4" style={{ fontSize: "0.95rem" }}>
+          This quiz was locked {formatDate(quiz.dueDate)}.
+        </p>
+      )}
+
+      {/* attempt history table */}
+      <h3 className="mb-3">Attempt History</h3>
+      <table className="w-100 mb-2" style={{ borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ borderBottom: "2px solid #dee2e6" }}>
+            <th style={{ width: 70 }} />
+            <th className="pb-1 text-start">Attempt</th>
+            <th className="pb-1 text-start">Time</th>
+            <th className="pb-1 text-start">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allAttempts.map((a, i) => {
+            const isLatest = a._id === allAttempts[allAttempts.length - 1]._id;
+            const isViewing = a._id === attempt._id;
+            const mins = a.startedAt
+              ? Math.round(
+                  (new Date(a.submittedAt).getTime() -
+                    new Date(a.startedAt).getTime()) /
+                    60000,
+                )
+              : null;
+            return (
+              <tr
+                key={a._id}
+                style={{ borderBottom: "1px solid #dee2e6", cursor: "pointer" }}
+                onClick={() =>
+                  router.push(
+                    `/courses/${cid}/quizzes/${qid}/results?attemptId=${a._id}`,
+                  )
+                }
+              >
+                <td
+                  className="py-2 text-muted"
+                  style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: 1 }}
+                >
+                  {isLatest ? "LATEST" : ""}
+                </td>
+                <td
+                  className="py-2"
+                  style={{ color: isViewing ? "#c0392b" : "inherit" }}
+                >
+                  Attempt {a.attemptNumber ?? i + 1}
+                </td>
+                <td className="py-2">
+                  {mins != null ? `${mins} minute${mins !== 1 ? "s" : ""}` : "—"}
+                </td>
+                <td className="py-2">
+                  {a.score} out of {a.totalPoints}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <hr />
+
+      {/* score summary */}
+      <div className="mb-4" style={{ fontSize: "0.95rem" }}>
+        <div>
+          Score for this quiz: <strong>{attempt.score} out of {attempt.totalPoints}</strong>
+        </div>
+        <div>Submitted {formatDate(attempt.submittedAt)}</div>
+        {durationMin != null && (
+          <div>This attempt took {durationMin} minute{durationMin !== 1 ? "s" : ""}.</div>
+        )}
       </div>
 
-      <div className="alert alert-info mb-4">
-        <strong>
-          Score: {attempt.score} / {attempt.totalPoints} pts
-        </strong>
-      </div>
-
+      {/* questions */}
       {questions.map((question, idx) => {
         const answer = answerMap.get(String(question._id));
         const isCorrect = answer?.isCorrect ?? false;
         const pointsEarned = answer?.pointsEarned ?? 0;
 
         return (
-          <div key={question._id} className="border rounded p-3 mb-3">
-            <div className="d-flex justify-content-between mb-2">
-              <strong>
-                Question {idx + 1}: {question.title}
-              </strong>
+          <div
+            key={question._id}
+            className="mb-4"
+            style={{ border: "1px solid #dee2e6", borderRadius: 4, overflow: "hidden" }}
+          >
+            {/* question header bar */}
+            <div
+              className="d-flex justify-content-between px-3 py-2"
+              style={{ background: "#f5f5f5", borderBottom: "1px solid #dee2e6", fontWeight: 600 }}
+            >
+              <span>Question {idx + 1}</span>
               <span>
-                {isCorrect 
+                {isCorrect
                   ? <FaCheckCircle className="text-success me-1" />
                   : <FaTimesCircle className="text-danger me-1" />}
                 {pointsEarned} / {question.points} pts
               </span>
             </div>
-            <p>{question.question}</p>
 
-            {/* mark correct answers for Multiple Choice questions */}
-            {question.type === "Multiple Choice" &&
-              question.choices?.map((choice: Choice, i: number) => (
-                <Form.Check
-                  key={i}
-                  type="radio"
-                  label={
-                    <span
-                      className={
-                        showCorrect && choice.isCorrect ? "text-success fw-bold" : ""
-                      }
-                    >
-                      {choice.text}
-                      {showCorrect && choice.isCorrect && " ✓"}
-                    </span>
-                  }
-                  checked={answer?.selectedChoice === choice.text}
-                  disabled
-                  readOnly
-                />
-              ))}
-            {/* mark correct answers for True/False questions */}
-            {question.type === "True/False" && (
-              [true, false].map((val) => (
-                <Form.Check
-                  key={String(val)}
-                  type="radio"
-                  label={
-                    <span className={showCorrect && question.trueFalseAnswer === val ? "text-success fw-bold" : ""}>
-                      {val ? "True" : "False"}
-                      {showCorrect && question.trueFalseAnswer === val && " ✓"}
-                    </span>
-                  }
-                  checked={answer?.trueFalseAnswer === val}
-                  disabled
-                  readOnly
-                />
-              ))
-            )}
-            {/* mark correct answers for Fill in the Blank questions */}
-            {question.type === "Fill in the Blank" && (
-              <div>
-                <Form.Control
-                  value={answer?.blankAnswer || ""}
-                  disabled
-                  className={isCorrect ? "border-success" : "border-danger"}
-                />
-                {showCorrect && !isCorrect && question.blanks && (
-                  <div className="text-success small mt-1">
-                    Correct answer(s): {question.blanks.join(", ")}
-                  </div>
-                )}
-              </div>
-            )}
+            {/* question body */}
+            <div className="p-3">
+              <p>{question.question}</p>
+
+              {/* mark correct answers for Multiple Choice questions */}
+              {question.type === "Multiple Choice" &&
+                question.choices?.map((choice: Choice, i: number) => (
+                  <Form.Check
+                    key={i}
+                    type="radio"
+                    label={
+                      <span className={showCorrect && choice.isCorrect ? "text-success fw-bold" : ""}>
+                        {choice.text}
+                        {showCorrect && choice.isCorrect && " ✓"}
+                      </span>
+                    }
+                    checked={answer?.selectedChoice === choice.text}
+                    disabled
+                    readOnly
+                  />
+                ))}
+
+              {/* mark correct answers for True/False questions */}
+              {question.type === "True/False" &&
+                ([true, false] as const).map((val) => (
+                  <Form.Check
+                    key={String(val)}
+                    type="radio"
+                    label={
+                      <span className={showCorrect && question.trueFalseAnswer === val ? "text-success fw-bold" : ""}>
+                        {val ? "True" : "False"}
+                        {showCorrect && question.trueFalseAnswer === val && " ✓"}
+                      </span>
+                    }
+                    checked={answer?.trueFalseAnswer === val}
+                    disabled
+                    readOnly
+                  />
+                ))}
+
+              {/* mark correct answers for Fill in the Blank questions */}
+              {question.type === "Fill in the Blank" && (
+                <div>
+                  <Form.Control
+                    value={answer?.blankAnswer || ""}
+                    disabled
+                    className={isCorrect ? "border-success" : "border-danger"}
+                  />
+                  {showCorrect && !isCorrect && question.blanks && (
+                    <div className="text-success small mt-1">
+                      Correct answer(s): {question.blanks.join(", ")}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         );
       })}
 
-      <div className="d-flex gap-2 mt-4">
-        <Button
-          variant="secondary"
-          onClick={() => router.push(`/courses/${cid}/quizzes`)}
-        >
-          Back to Quizzes
+      {/* footer buttons */}
+      {attemptId && (
+        <div className="d-flex gap-2 mt-2">
+          <Button
+            variant="secondary"
+            
+            onClick={() => router.push(`/courses/${cid}/quizzes/${quiz._id}`)}
+          >
+            Back to Quiz
         </Button>
         {isStudent && quiz.multipleAttempts && attemptsRemaining > 0 && !isPastDue && (
           <Button
             variant="danger"
             onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/take`)}
           >
-            Retake Quiz ({attemptsRemaining} attempt {attemptsRemaining !== 1 ? "s" : ""} remaining)
+            Retake Quiz ({attemptsRemaining} attempt{attemptsRemaining !== 1 ? "s" : ""} remaining)
           </Button>
         )}
       </div>
+    )}
     </div>
   );
 }

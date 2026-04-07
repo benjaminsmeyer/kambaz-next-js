@@ -26,6 +26,7 @@ export default function TakeQuiz() {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [submitting, setSubmitting] = useState(false);
   const [blocked, setBlocked] = useState<string | null>(null);
+  const [startedAt, setStartedAt] = useState(new Date());
 
 
   useEffect(() => {
@@ -44,12 +45,13 @@ export default function TakeQuiz() {
           return;
         }
         // check availability
-        const now = new Date();
-        if (quiz.availableDate && now < new Date(quiz.availableDate)) {
+        setStartedAt(new Date());
+        console.log("checking availability with startedAt", startedAt);
+        if (quiz.availableDate && startedAt < new Date(quiz.availableDate)) {
           setBlocked("This quiz is not yet available.");
           return;
         }
-        if (quiz.untilDate && now > new Date(quiz.untilDate) || quiz.dueDate && now > new Date(quiz.dueDate)) {
+        if (quiz.untilDate && startedAt > new Date(quiz.untilDate) || quiz.dueDate && startedAt > new Date(quiz.dueDate)) {
           setBlocked("This quiz is no longer available.");
           return;
         }
@@ -85,7 +87,8 @@ export default function TakeQuiz() {
           blankAnswer: a.blankAnswer,
         };
       });
-      const attempt = await submitAttempt(qid as string, payload);
+      console.log("submitting attempt with payload", payload, "and startedAt", startedAt.toISOString());
+      const attempt = await submitAttempt(qid as string, payload, startedAt.toISOString());
       router.push(`/courses/${cid}/quizzes/${qid}/results?attemptId=${attempt._id}`);
     } catch (err) {
       console.error("Failed to submit quiz", err);
