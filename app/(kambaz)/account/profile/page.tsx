@@ -7,6 +7,19 @@ import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
 import { FormControl } from "react-bootstrap";
 import * as client from "../client";
+
+const normalizeDateForInput = (value: unknown): string => {
+  if (typeof value !== "string" || !value.trim()) {
+    return "";
+  }
+  return value.slice(0, 10);
+};
+
+const normalizeProfileDates = (profileData: any) => ({
+  ...profileData,
+  dob: normalizeDateForInput(profileData?.dob),
+});
+
 export default function Profile() {
   const [profile, setProfile] = useState<any>(null);
   const [error, setError] = useState("");
@@ -24,9 +37,14 @@ export default function Profile() {
     setError("");
     setSuccess("");
     try {
-      const updatedProfile = await client.updateUser(profile);
-      dispatch(setCurrentUser(updatedProfile));
-      setProfile(updatedProfile);
+      const payload = {
+        ...profile,
+        dob: normalizeDateForInput(profile?.dob),
+      };
+      const updatedProfile = await client.updateUser(payload);
+      const normalizedProfile = normalizeProfileDates(updatedProfile);
+      dispatch(setCurrentUser(normalizedProfile));
+      setProfile(normalizedProfile);
       setSuccess("Profile updated successfully.");
     } catch {
       setError("Unable to update profile. Please try again.");
@@ -39,9 +57,9 @@ export default function Profile() {
     }
     try {
       const serverProfile = await client.profile();
-      setProfile(serverProfile);
+      setProfile(normalizeProfileDates(serverProfile));
     } catch {
-      setProfile(currentUser);
+      setProfile(normalizeProfileDates(currentUser));
     }
   };
   const signout = async () => {
@@ -115,7 +133,7 @@ export default function Profile() {
             id="wd-dob"
             className="mb-2"
             type="date"
-            value={profile.dob || ""}
+            value={normalizeDateForInput(profile.dob)}
             onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
           />
           <FormControl

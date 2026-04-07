@@ -55,7 +55,8 @@ export default function Quizzes() {
 
   const courseQuizzes = quizzes.filter(
     (q: any) =>
-      q.course === cid && (canEdit || q.published) &&
+      q.course === cid &&
+      (canEdit || q.published) &&
       q.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
@@ -174,8 +175,8 @@ export default function Quizzes() {
                     <div className="small mt-1">
                       <span className="text-danger">Multiple Modules</span> |{" "}
                       <strong>{availabilityStatus}</strong> |{" "}
-                      <strong>Due</strong> {dueDate} |{" "}
-                      {quiz.points} pts | {quiz.numberOfQuestions} Questions
+                      <strong>Due</strong> {dueDate} | {quiz.points} pts |{" "}
+                      {quiz.numberOfQuestions} Questions
                     </div>
                     {isStudent && quiz.score !== undefined && (
                       <div className="small text-muted">
