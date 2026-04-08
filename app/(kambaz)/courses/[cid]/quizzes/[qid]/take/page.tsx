@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { RootState } from "@/app/(kambaz)/store";
 import {
   findQuizById,
@@ -30,6 +30,8 @@ export default function TakeQuiz() {
   const [submitting, setSubmitting] = useState(false);
   const [blocked, setBlocked] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState(new Date());
+  const [showTimeUpModal, setShowTimeUpModal] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
   useEffect(() => {
     if (!qid) return;
@@ -70,6 +72,9 @@ export default function TakeQuiz() {
         }
 
         setQuiz(quiz);
+        if (quiz.timeLimit > 0) {
+          setTimeLeft(quiz.timeLimit * 60);
+        }
         setQuestions(questions);
         if (quiz.shuffleAnswers) {
           const shuffled: Record<string, any[]> = {};
@@ -91,6 +96,18 @@ export default function TakeQuiz() {
     };
     load();
   }, [qid, cid, currentUser, router]);
+
+  useEffect(() => {
+    if (timeLeft === null) return;
+    if (timeLeft <= 0) {
+      setShowTimeUpModal(true);
+      return;
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev !== null ? prev - 1 : null));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
 
   const setAnswer = (qid: string, value: any) =>
     setAnswers((prev) => ({ ...prev, [qid]: value }));
@@ -146,7 +163,17 @@ export default function TakeQuiz() {
 
   return (
     <div id="wd-quiz-take" className="p-4">
-      <h2 className="mb-1">{quiz.title}</h2>
+      <div className="d-flex justify-content-between align-items-start mb-1">
+        <h2 className="mb-0">{quiz.title}</h2>
+        {timeLeft !== null && (
+          <div
+            className={`fs-5 fw-semibold px-3 py-1 rounded border ${timeLeft <= 60 ? "text-danger border-danger" : "text-dark border-secondary"}`}
+          >
+            {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
+            {String(timeLeft % 60).padStart(2, "0")}
+          </div>
+        )}
+      </div>
       {quiz.description && (
         <p className="text-muted mb-3">{quiz.description}</p>
       )}
@@ -208,6 +235,17 @@ export default function TakeQuiz() {
           {submitting ? "Submitting..." : "Submit Quiz"}
         </Button>
       </div>
+      <Modal show={showTimeUpModal} onHide={() => setShowTimeUpModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Your time for this quiz is up</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>All of your answers will now be submitted?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleSubmit}>
+            Continue
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
