@@ -32,6 +32,7 @@ export default function TakeQuiz() {
   const [startedAt, setStartedAt] = useState(new Date());
   const [showTimeUpModal, setShowTimeUpModal] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     if (!qid) return;
@@ -125,12 +126,6 @@ export default function TakeQuiz() {
           blankAnswer: a.blankAnswer,
         };
       });
-      console.log(
-        "submitting attempt with payload",
-        payload,
-        "and startedAt",
-        startedAt.toISOString(),
-      );
       const attempt = await submitAttempt(
         qid as string,
         payload,
@@ -178,63 +173,162 @@ export default function TakeQuiz() {
         <p className="text-muted mb-3">{quiz.description}</p>
       )}
 
-      {questions.map((q, idx) => (
-        <div key={q._id} className="border rounded p-3 mb-3">
-          <div className="d-flex justify-content-between mb-2">
-            <strong>
-              Question {idx + 1}: {q.title}
-            </strong>
-            <span>{q.points} pts</span>
+      {quiz.oneQuestionAtATime ? (
+        (() => {
+          const q = questions[currentPage];
+          if (!q) return null;
+          const isLast = currentPage === questions.length - 1;
+          return (
+            <>
+              <div className="text-muted mb-2">
+                Question {currentPage + 1} of {questions.length}
+              </div>
+              <div className="border rounded p-3 mb-3">
+                <div className="d-flex justify-content-between mb-2">
+                  <strong>
+                    Question {currentPage + 1}: {q.title}
+                  </strong>
+                  <span>{q.points} pts</span>
+                </div>
+                <p>{q.question}</p>
+
+                {q.type === "Multiple Choice" &&
+                  (shuffledChoices[q._id] ?? q.choices)?.map(
+                    (c: any, i: number) => (
+                      <Form.Check
+                        key={i}
+                        type="radio"
+                        name={`q-${q._id}`}
+                        label={c.text}
+                        checked={answers[q._id]?.selectedChoice === c.text}
+                        onChange={() =>
+                          setAnswer(q._id, { selectedChoice: c.text })
+                        }
+                      />
+                    ),
+                  )}
+
+                {q.type === "True/False" &&
+                  ([true, false] as const).map((val) => (
+                    <Form.Check
+                      key={String(val)}
+                      type="radio"
+                      name={`q-${q._id}`}
+                      label={val ? "True" : "False"}
+                      checked={answers[q._id]?.trueFalseAnswer === val}
+                      onChange={() =>
+                        setAnswer(q._id, { trueFalseAnswer: val })
+                      }
+                    />
+                  ))}
+
+                {q.type === "Fill in the Blank" && (
+                  <Form.Control
+                    value={answers[q._id]?.blankAnswer ?? ""}
+                    onChange={(e) =>
+                      setAnswer(q._id, { blankAnswer: e.target.value })
+                    }
+                    placeholder="Your answer"
+                  />
+                )}
+              </div>
+              <div className="d-flex gap-2 mt-4">
+                {currentPage > 0 && (
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                  >
+                    Back
+                  </Button>
+                )}
+                {isLast ? (
+                  <Button
+                    variant="danger"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                  >
+                    {submitting ? "Submitting..." : "Submit Quiz"}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                  >
+                    Next
+                  </Button>
+                )}
+              </div>
+            </>
+          );
+        })()
+      ) : (
+        <>
+          {questions.map((q, idx) => (
+            <div key={q._id} className="border rounded p-3 mb-3">
+              <div className="d-flex justify-content-between mb-2">
+                <strong>
+                  Question {idx + 1}: {q.title}
+                </strong>
+                <span>{q.points} pts</span>
+              </div>
+              <p>{q.question}</p>
+
+              {q.type === "Multiple Choice" &&
+                (shuffledChoices[q._id] ?? q.choices)?.map(
+                  (c: any, i: number) => (
+                    <Form.Check
+                      key={i}
+                      type="radio"
+                      name={`q-${q._id}`}
+                      label={c.text}
+                      checked={answers[q._id]?.selectedChoice === c.text}
+                      onChange={() =>
+                        setAnswer(q._id, { selectedChoice: c.text })
+                      }
+                    />
+                  ),
+                )}
+
+              {q.type === "True/False" &&
+                ([true, false] as const).map((val) => (
+                  <Form.Check
+                    key={String(val)}
+                    type="radio"
+                    name={`q-${q._id}`}
+                    label={val ? "True" : "False"}
+                    checked={answers[q._id]?.trueFalseAnswer === val}
+                    onChange={() => setAnswer(q._id, { trueFalseAnswer: val })}
+                  />
+                ))}
+
+              {q.type === "Fill in the Blank" && (
+                <Form.Control
+                  value={answers[q._id]?.blankAnswer ?? ""}
+                  onChange={(e) =>
+                    setAnswer(q._id, { blankAnswer: e.target.value })
+                  }
+                  placeholder="Your answer"
+                />
+              )}
+            </div>
+          ))}
+          <div className="d-flex gap-2 mt-4">
+            <Button
+              variant="secondary"
+              onClick={() => router.push(`/courses/${cid}/quizzes`)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              {submitting ? "Submitting..." : "Submit Quiz"}
+            </Button>
           </div>
-          <p>{q.question}</p>
-
-          {q.type === "Multiple Choice" &&
-            (shuffledChoices[q._id] ?? q.choices)?.map((c: any, i: number) => (
-              <Form.Check
-                key={i}
-                type="radio"
-                name={`q-${q._id}`}
-                label={c.text}
-                checked={answers[q._id]?.selectedChoice === c.text}
-                onChange={() => setAnswer(q._id, { selectedChoice: c.text })}
-              />
-            ))}
-
-          {q.type === "True/False" &&
-            ([true, false] as const).map((val) => (
-              <Form.Check
-                key={String(val)}
-                type="radio"
-                name={`q-${q._id}`}
-                label={val ? "True" : "False"}
-                checked={answers[q._id]?.trueFalseAnswer === val}
-                onChange={() => setAnswer(q._id, { trueFalseAnswer: val })}
-              />
-            ))}
-
-          {q.type === "Fill in the Blank" && (
-            <Form.Control
-              value={answers[q._id]?.blankAnswer ?? ""}
-              onChange={(e) =>
-                setAnswer(q._id, { blankAnswer: e.target.value })
-              }
-              placeholder="Your answer"
-            />
-          )}
-        </div>
-      ))}
-
-      <div className="d-flex gap-2 mt-4">
-        <Button
-          variant="secondary"
-          onClick={() => router.push(`/courses/${cid}/quizzes`)}
-        >
-          Cancel
-        </Button>
-        <Button variant="danger" onClick={handleSubmit} disabled={submitting}>
-          {submitting ? "Submitting..." : "Submit Quiz"}
-        </Button>
-      </div>
+        </>
+      )}
       <Modal show={showTimeUpModal} onHide={() => setShowTimeUpModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Your time for this quiz is up</Modal.Title>
