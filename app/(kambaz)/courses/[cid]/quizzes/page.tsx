@@ -54,11 +54,21 @@ export default function Quizzes() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const courseQuizzes = quizzes.filter(
-    (q: any) =>
+    (q) =>
       q.course === cid &&
       (canEdit || q.published) &&
       q.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  courseQuizzes.sort((a, b) => {
+    const aTime = a.availableDate
+      ? new Date(a.availableDate).getTime()
+      : Infinity;
+    const bTime = b.availableDate
+      ? new Date(b.availableDate).getTime()
+      : Infinity;
+    return aTime - bTime;
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -153,86 +163,91 @@ export default function Quizzes() {
             )}
           </div>
         </ListGroupItem>
-
-        {courseQuizzes.map((quiz: any) => {
-          const availabilityStatus = getAvailabilityStatus(quiz);
-          const dueDate = quiz.dueDate
-            ? new Date(quiz.dueDate).toLocaleDateString()
-            : "No due date";
-          return (
-            <ListGroupItem key={quiz._id} className="p-3">
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="d-flex align-items-center">
-                  <BsGripVertical className="me-2 fs-3 flex-shrink-0" />
-                  <FaClipboardList className="me-4 fs-3 text-success flex-shrink-0" />
-                  <div>
-                    <Link
-                      href={`/courses/${cid}/quizzes/${quiz._id}`}
-                      className="text-decoration-none text-dark fw-bold fs-5"
-                    >
-                      {quiz.title}
-                    </Link>
-                    <div className="small mt-1">
-                      <span className="text-danger">Multiple Modules</span> |{" "}
-                      <strong>{availabilityStatus}</strong> |{" "}
-                      <strong>Due</strong> {dueDate} | {quiz.points} pts |{" "}
-                      {quiz.numberOfQuestions} Questions
-                    </div>
-                    {isStudent && quiz.score !== undefined && (
-                      <div className="small text-muted">
-                        Score: {quiz.score} / {quiz.points}
+        {courseQuizzes.length === 0 ? (
+          <div className="p-3 text-muted">
+            No quizzes yet, click the add button to create a new one.
+          </div>
+        ) : (
+          courseQuizzes.map((quiz: any) => {
+            const availabilityStatus = getAvailabilityStatus(quiz);
+            const dueDate = quiz.dueDate
+              ? new Date(quiz.dueDate).toLocaleDateString()
+              : "No due date";
+            return (
+              <ListGroupItem key={quiz._id} className="p-3">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center">
+                    <BsGripVertical className="me-2 fs-3 flex-shrink-0" />
+                    <FaClipboardList className="me-4 fs-3 text-success flex-shrink-0" />
+                    <div>
+                      <Link
+                        href={`/courses/${cid}/quizzes/${quiz._id}`}
+                        className="text-decoration-none text-dark fw-bold fs-5"
+                      >
+                        {quiz.title}
+                      </Link>
+                      <div className="small mt-1">
+                        <span className="text-danger">Multiple Modules</span> |{" "}
+                        <strong>{availabilityStatus}</strong> |{" "}
+                        <strong>Due</strong> {dueDate} | {quiz.points} pts |{" "}
+                        {quiz.numberOfQuestions} Questions
                       </div>
+                      {isStudent && quiz.score !== undefined && (
+                        <div className="small text-muted">
+                          Score: {quiz.score} / {quiz.points}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center gap-2 flex-shrink-0">
+                    {canEdit && (
+                      <>
+                        <Button
+                          variant="link"
+                          className="p-0 border-0"
+                          onClick={() => handleTogglePublish(quiz)}
+                          title={quiz.published ? "Unpublish" : "Publish"}
+                        >
+                          {quiz.published ? (
+                            <FaCheckCircle className="text-success fs-5" />
+                          ) : (
+                            <FaBan className="text-secondary fs-5" />
+                          )}
+                        </Button>
+                        <Dropdown align="end">
+                          <Dropdown.Toggle
+                            as="span"
+                            style={{ cursor: "pointer" }}
+                            id={`wd-quiz-menu-${quiz._id}`}
+                          >
+                            <IoEllipsisVertical className="fs-4" />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              href={`/courses/${cid}/quizzes/${quiz._id}/edit`}
+                            >
+                              Edit
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => handleDeleteClick(quiz._id)}
+                            >
+                              Delete
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => handleTogglePublish(quiz)}
+                            >
+                              {quiz.published ? "Unpublish" : "Publish"}
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </>
                     )}
                   </div>
                 </div>
-                <div className="d-flex align-items-center gap-2 flex-shrink-0">
-                  {canEdit && (
-                    <>
-                      <Button
-                        variant="link"
-                        className="p-0 border-0"
-                        onClick={() => handleTogglePublish(quiz)}
-                        title={quiz.published ? "Unpublish" : "Publish"}
-                      >
-                        {quiz.published ? (
-                          <FaCheckCircle className="text-success fs-5" />
-                        ) : (
-                          <FaBan className="text-secondary fs-5" />
-                        )}
-                      </Button>
-                      <Dropdown align="end">
-                        <Dropdown.Toggle
-                          as="span"
-                          style={{ cursor: "pointer" }}
-                          id={`wd-quiz-menu-${quiz._id}`}
-                        >
-                          <IoEllipsisVertical className="fs-4" />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            href={`/courses/${cid}/quizzes/${quiz._id}/edit`}
-                          >
-                            Edit
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => handleDeleteClick(quiz._id)}
-                          >
-                            Delete
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => handleTogglePublish(quiz)}
-                          >
-                            {quiz.published ? "Unpublish" : "Publish"}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </>
-                  )}
-                </div>
-              </div>
-            </ListGroupItem>
-          );
-        })}
+              </ListGroupItem>
+            );
+          })
+        )}
       </ListGroup>
 
       <Modal show={showDeleteDialog} onHide={handleCancelDelete}>

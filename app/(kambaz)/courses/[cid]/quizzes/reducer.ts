@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 import { quizzes } from "../../../database";
+import { Quiz } from "./client";
 
 const initialState = {
-  quizzes: quizzes as any[],
+  quizzes: quizzes as Quiz[],
 };
 
 const quizzesSlice = createSlice({

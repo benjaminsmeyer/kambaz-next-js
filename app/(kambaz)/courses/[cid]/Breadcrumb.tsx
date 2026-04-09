@@ -18,6 +18,9 @@ export default function Breadcrumb({
     if (pathname.includes("/assignments")) {
       return "Assignments";
     }
+    if (pathname.includes("/quizzes")) {
+      return "Quiz";
+    }
     return capitalize(pathname.split("/").pop() || "");
   };
 
