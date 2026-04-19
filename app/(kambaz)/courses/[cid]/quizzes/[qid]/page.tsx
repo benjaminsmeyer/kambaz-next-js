@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { RootState } from "@/app/(kambaz)/store";
+import { updateQuiz as updateQuizAction } from "../reducer";
 import {
   findQuizById,
+  updateQuiz as updateQuizOnServer,
   getAttempts,
   getLatestAttempt,
   Quiz,
@@ -17,6 +19,7 @@ import QuizResults from "./results/page";
 export default function QuizDetails() {
   const { cid, qid } = useParams();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer,
@@ -73,6 +76,19 @@ export default function QuizDetails() {
 
   const formatDate = (d?: string) => (d ? new Date(d).toLocaleString() : "—");
 
+  const handleTogglePublish = async () => {
+    if (!quiz || !qid) return;
+    try {
+      const updated = await updateQuizOnServer(qid as string, {
+        published: !quiz.published,
+      });
+      setQuiz(updated);
+      dispatch(updateQuizAction(updated));
+    } catch (err) {
+      console.error("Failed to toggle publish", err);
+    }
+  };
+
   const handleStartQuiz = () => {
     if (quiz?.accessCode) {
       setShowAccessModal(true);
@@ -111,6 +127,12 @@ export default function QuizDetails() {
               onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/edit`)}
             >
               Edit
+            </Button>
+            <Button
+              variant={quiz.published ? "outline-secondary" : "success"}
+              onClick={handleTogglePublish}
+            >
+              {quiz.published ? "Unpublish" : "Publish"}
             </Button>
           </>
         )}

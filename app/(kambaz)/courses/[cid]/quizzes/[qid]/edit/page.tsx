@@ -140,6 +140,13 @@ export default function QuizEditor() {
     setDraftQuestion({ ...newQ });
   };
 
+  const handleSaveQuestions = async () => {
+    if (editingId) {
+      await handleUpdateQuestion();
+    }
+    router.push(`/courses/${cid}/quizzes/${qid}`);
+  };
+
   const totalPoints = questions.reduce((sum, q) => sum + (q.points || 0), 0);
 
   const updateDraftChoice = (index: number, field: string, value: any) => {
@@ -722,10 +729,7 @@ export default function QuizEditor() {
               >
                 Cancel
               </Button>
-              <Button
-                variant="danger"
-                onClick={() => router.push(`/courses/${cid}/quizzes/${qid}`)}
-              >
+              <Button variant="danger" onClick={handleSaveQuestions}>
                 Save
               </Button>
             </div>
