@@ -27,6 +27,7 @@ export default function QuizPreview() {
     const [answers, setAnswers] = useState<Record<string, any>>({});
     const [submitted, setSubmitted] = useState(false);
     const [results, setResults] = useState<any[]>([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         if (!canEdit) {
@@ -69,6 +70,7 @@ export default function QuizPreview() {
         });
         setResults(graded);
         setSubmitted(true);
+        setCurrentIndex(0);
     };
 
     if (!quiz) return <div className="p-4">Loading...</div>;
@@ -84,13 +86,35 @@ export default function QuizPreview() {
 
             <h2 className="mb-3">{quiz.title}</h2>
 
-            {!submitted && (
-                <>
-                    {questions.map((q, idx) => (
-                        <div key={q._id} className="border rounded p-3 mb-3">
+            {!submitted && questions.length > 0 && (() => {
+                const q = questions[currentIndex];
+                return (
+                    <>
+                        {/* Question jump bar */}
+                        <div className="d-flex gap-1 flex-wrap mb-3">
+                            {questions.map((question, i) => (
+                                <Button
+                                    key={i}
+                                    size="sm"
+                                    variant={
+                                        i === currentIndex
+                                            ? "primary"
+                                            : answers[question._id] !== undefined
+                                                ? "success"
+                                                : "outline-secondary"
+                                    }
+                                    onClick={() => setCurrentIndex(i)}
+                                >
+                                    {i + 1}
+                                </Button>
+                            ))}
+                        </div>
+
+                        {/* Current question */}
+                        <div className="border rounded p-3 mb-3">
                             <div className="d-flex justify-content-between mb-2">
                                 <strong>
-                                    Question {idx + 1}: {q.title}
+                                    Question {currentIndex + 1}: {q.title}
                                 </strong>
                                 <span>{q.points} pts</span>
                             </div>
@@ -155,27 +179,62 @@ export default function QuizPreview() {
                                 />
                             )}
                         </div>
-                    ))}
 
-                    <Button variant="danger" onClick={handleSubmit}>
-                        Submit Quiz
-                    </Button>
-                </>
-            )}
+                        {/* Prev / Next / Submit navigation */}
+                        <div className="d-flex justify-content-between mt-3">
+                            <Button
+                                variant="outline-secondary"
+                                disabled={currentIndex === 0}
+                                onClick={() => setCurrentIndex((i) => i - 1)}
+                            >
+                                ← Previous
+                            </Button>
+                            {currentIndex < questions.length - 1 ? (
+                                <Button
+                                    variant="outline-primary"
+                                    onClick={() => setCurrentIndex((i) => i + 1)}
+                                >
+                                    Next →
+                                </Button>
+                            ) : (
+                                <Button variant="danger" onClick={handleSubmit}>
+                                    Submit Quiz
+                                </Button>
+                            )}
+                        </div>
+                    </>
+                );
+            })()}
 
-            {submitted && (
-                <>
-                    <div className="alert alert-info mb-4">
-                        <strong>
-                            Score: {score} / {total} pts
-                        </strong>
-                    </div>
+            {submitted && results.length > 0 && (() => {
+                const r = results[currentIndex];
+                return (
+                    <>
+                        <div className="alert alert-info mb-4">
+                            <strong>
+                                Score: {score} / {total} pts
+                            </strong>
+                        </div>
 
-                    {results.map((r, idx) => (
-                        <div key={r.question._id} className="border rounded p-3 mb-3">
+                        {/* Question jump bar for results */}
+                        <div className="d-flex gap-1 flex-wrap mb-3">
+                            {results.map((_, i) => (
+                                <Button
+                                    key={i}
+                                    size="sm"
+                                    variant={i === currentIndex ? "primary" : "success"}
+                                    onClick={() => setCurrentIndex(i)}
+                                >
+                                    {i + 1}
+                                </Button>
+                            ))}
+                        </div>
+
+                        {/* Current result */}
+                        <div className="border rounded p-3 mb-3">
                             <div className="d-flex justify-content-between mb-2">
                                 <strong>
-                                    Question {idx + 1}: {r.question.title}
+                                    Question {currentIndex + 1}: {r.question.title}
                                 </strong>
                                 <span>
                                     {r.isCorrect ? (
@@ -252,9 +311,27 @@ export default function QuizPreview() {
                                 />
                             )}
                         </div>
-                    ))}
-                </>
-            )}
+
+                        {/* Prev / Next navigation for results */}
+                        <div className="d-flex justify-content-between mt-3">
+                            <Button
+                                variant="outline-secondary"
+                                disabled={currentIndex === 0}
+                                onClick={() => setCurrentIndex((i) => i - 1)}
+                            >
+                                ← Previous
+                            </Button>
+                            <Button
+                                variant="outline-primary"
+                                disabled={currentIndex === results.length - 1}
+                                onClick={() => setCurrentIndex((i) => i + 1)}
+                            >
+                                Next →
+                            </Button>
+                        </div>
+                    </>
+                );
+            })()}
 
             <div className="d-flex gap-2 mt-4">
                 <Button
@@ -266,7 +343,8 @@ export default function QuizPreview() {
                 <Button
                     variant="secondary"
                     onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/edit`)}
-                >          Edit Quiz
+                >
+                    Edit Quiz
                 </Button>
             </div>
         </div>
